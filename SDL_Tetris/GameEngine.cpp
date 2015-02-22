@@ -5,7 +5,6 @@ GameEngine::GameEngine() : inGame(true), _window(nullptr), _renderer(nullptr)
 {
 }
 
-
 GameEngine::~GameEngine()
 {
 }
@@ -13,7 +12,11 @@ GameEngine::~GameEngine()
 void GameEngine::run()
 {
 	init();
-	gameLoop();
+
+	while (inGame) {
+		gameLoop();
+	}
+	
 	close();
 }
 
@@ -31,23 +34,35 @@ void GameEngine::init()
 
 }
 
+void GameEngine::gameLoop()
+{
+	handleInput();
+}
+
+void GameEngine::handleInput()
+{
+	SDL_Event evnt;
+
+	while (SDL_PollEvent(&evnt)) {
+		if (evnt.type == SDL_QUIT)
+			inGame = false;
+	}
+}
+
+void GameEngine::update()
+{
+
+}
+
+void GameEngine::render()
+{
+
+}
+
 void GameEngine::close()
 {
 	// Destroy All The Things!
 	SDL_DestroyRenderer(_renderer);
 	SDL_DestroyWindow(_window);
 	SDL_Quit();
-}
-
-void GameEngine::gameLoop()
-{
-	while (inGame) {
-
-		SDL_Event evnt;
-
-		while (SDL_PollEvent(&evnt)) {
-			if (evnt.type == SDL_QUIT)
-				inGame = false;
-		}
-	}
 }

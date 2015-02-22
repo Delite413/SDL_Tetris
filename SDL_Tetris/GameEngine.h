@@ -13,6 +13,9 @@ public:
 	void run();
 	void init();
 	void gameLoop();
+	void handleInput();
+	void update();
+	void render();
 	void close();
 
 private:
