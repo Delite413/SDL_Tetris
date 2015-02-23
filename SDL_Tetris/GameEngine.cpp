@@ -37,6 +37,8 @@ void GameEngine::init()
 void GameEngine::gameLoop()
 {
 	handleInput();
+	update();
+	render();
 }
 
 void GameEngine::handleInput()
@@ -56,13 +58,19 @@ void GameEngine::update()
 
 void GameEngine::render()
 {
+	SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
+	SDL_RenderClear(_renderer);
 
+
+	SDL_RenderPresent(_renderer);
 }
 
 void GameEngine::close()
 {
 	// Destroy All The Things!
 	SDL_DestroyRenderer(_renderer);
+	_renderer = nullptr;
 	SDL_DestroyWindow(_window);
+	_window = nullptr;
 	SDL_Quit();
 }

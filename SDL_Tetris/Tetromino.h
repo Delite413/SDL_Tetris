@@ -2,7 +2,9 @@
 class Tetromino
 {
 public:
-	Tetromino();
 	~Tetromino();
+
+private:
+	Tetromino();
 };
 

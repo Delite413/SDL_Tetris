@@ -69,11 +69,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Board.cpp" />
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="Tetris.cpp" />
     <ClCompile Include="Tetromino.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Board.h" />
     <ClInclude Include="GameEngine.h" />
     <ClInclude Include="Tetromino.h" />
   </ItemGroup>

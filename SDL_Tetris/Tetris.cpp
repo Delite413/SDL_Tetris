@@ -6,6 +6,5 @@ int main(int argv, char** argc) {
 	GameEngine gameEngine;
 	gameEngine.run();
 
-
 	return 0;
 }
