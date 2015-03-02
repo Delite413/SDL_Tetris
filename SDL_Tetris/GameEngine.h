@@ -1,12 +1,20 @@
 #pragma once
 
 #include <SDL/SDL.h>
+#include <deque>
+#include <random>
+
+#include "Board.h"
+#include "Tetromino.h"
+#include "T_Block.h"
 
 class GameEngine
 {
 public:
 	GameEngine();
 	~GameEngine();
+
+	static const int BLOCK_SIZE = 16;
 
 	bool inGame;
 
@@ -21,6 +29,16 @@ public:
 private:
 	SDL_Window* _window;
 	SDL_Renderer* _renderer;
-	
+	Board* _gameBoard;
+	Tetromino* _tetromino;
+
+	int _convertedX;
+	int _convertedY;
+	std::deque<Tetromino*> _bagOfTetrominos;
+
+	void checkCollision();
+	void convertCoord();
+	void generateTetrominos();
+	void moveBrick();
 };
 
