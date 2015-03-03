@@ -29,6 +29,7 @@ public:
 private:
 	SDL_Window* _window;
 	SDL_Renderer* _renderer;
+
 	Board* _gameBoard;
 	Tetromino* _tetromino;
 

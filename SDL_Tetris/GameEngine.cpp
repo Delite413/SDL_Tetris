@@ -72,7 +72,6 @@ void GameEngine::generateTetrominos()
 			default:
 				break;
 			}
-			std::cout << "Size of Deque is: " << _bagOfTetrominos.size() << std::endl;
 		}
 	}
 }
@@ -85,6 +84,20 @@ void GameEngine::handleInput()
 		switch (evnt.type) {
 		case SDL_QUIT:
 			inGame = false;
+			break;
+		case SDL_KEYDOWN:
+			if (evnt.key.keysym.sym == SDLK_RIGHT) {
+				if ((*_bagOfTetrominos.front()).checkValidLateralMovement()) {
+					(*_bagOfTetrominos.front()).setX((*_bagOfTetrominos.front()).getX() + BLOCK_SIZE);
+				}
+			}
+			if (evnt.key.keysym.sym == SDLK_LEFT) {
+				if ((*_bagOfTetrominos.front()).checkValidLateralMovement()) {
+					(*_bagOfTetrominos.front()).setX((*_bagOfTetrominos.front()).getX() - BLOCK_SIZE);
+				}
+			}
+			break;
+		default:
 			break;
 		}
 	}
@@ -106,8 +119,7 @@ void GameEngine::render()
 
 	//Draw Current Tetromino
 	(*_bagOfTetrominos.front()).render();
-	//DEBUG SHIT
-	std::cout << (*_bagOfTetrominos.front()).getY() << " is currentBlockY" << std::endl;
+
 }
 
 void GameEngine::close()
@@ -132,11 +144,13 @@ bool GameEngine::checkValidMove()
 		return false;
 	}
 
+	// Checks for Collisions
 	if ((*_bagOfTetrominos.front()).checkCollision()) {
 		(*_bagOfTetrominos.front()).placeBrick();
 		_bagOfTetrominos.pop_front();
 		return false;
 	}
+
 	return true;
 }
 
@@ -147,9 +161,6 @@ void GameEngine::convertCoord()
 
 	// Converted Y Coordinate
 	_convertedY = ((*_bagOfTetrominos.front()).getY() - 150) / 16;
-
-	//DEBUG OUTPUT
-	std::cout << "Converted Coord: (" << _convertedX << ", " << _convertedY << ")" << std::endl;
 }
 
 void GameEngine::moveBrick()
