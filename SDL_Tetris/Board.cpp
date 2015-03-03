@@ -7,7 +7,7 @@ Board::Board(SDL_Renderer* _renderer) : _renderer(_renderer), _blockSize(16)
 
 	for (int i = 0; i < BOARD_WIDTH; i++) {
 		for (int j = 0; j < BOARD_HEIGHT; j++) {
-			_board[i][j] = false;
+			_board[i][j] = 0;
 		}
 	}
 	// Create Board Texture
@@ -25,22 +25,42 @@ void Board::update()
 
 void Board::render()
 {
+	// Prep boardTexture
+	SDL_SetRenderTarget(_renderer, boardTexture);
+	SDL_SetTextureBlendMode(boardTexture, SDL_BLENDMODE_BLEND);
+
 	for (int i = 0; i < BOARD_WIDTH; i++) {
 		for (int j = 0; j < BOARD_HEIGHT; j++) {
-			if (_board[i][j] == false) {
+			if (_board[i][j] == 0) {
 				SDL_Rect emptyBlock = { 150 + i * _blockSize, 150 + j * _blockSize, _blockSize, _blockSize };
-				SDL_SetRenderTarget(_renderer, boardTexture);
-				SDL_SetTextureBlendMode(boardTexture, SDL_BLENDMODE_BLEND);
-				SDL_SetRenderDrawColor(_renderer, 0, 255, 0, 255);
+				SDL_SetRenderDrawColor(_renderer, 50, 50, 50, 255);
 				SDL_RenderDrawRect(_renderer, &emptyBlock);
+			}
+			else if (_board[i][j] == 1) {
+				// Tetromino Piece 1
+				SDL_Rect t_blockRect = { 150 + i * _blockSize, 150 + j * _blockSize, _blockSize, _blockSize };
+				SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 255);
+				SDL_RenderFillRect(_renderer, &t_blockRect);
+			}
+			else if (_board[i][j] == 2) {
+				// Tetromino Piece 2
+			}
+			else if (_board[i][j] == 3) {
+				// Tetromino Piece 3
+			}
+			else if (_board[i][j] == 4) {
+				// Tetromino Piece 4
+			}
+			else if (_board[i][j] == 5) {
+				// Tetromino Piece 5
+			}
+			else if (_board[i][j] == 6) {
+				// Tetromino Piece 6
+			}
+			else if (_board[i][j] == 7) {
+				// Tetromino Piece 7
 			}
 		}
 	}
-	
 }
 
-bool Board::checkValidMove(float x, float y)
-{
-
-	return true;
-}

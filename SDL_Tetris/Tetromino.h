@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL/SDL.h>
 #include <deque>
+#include "Board.h"
 
 class Tetromino
 {
@@ -9,7 +10,9 @@ public:
 	virtual ~Tetromino();
 
 	//Virtual Functions
+	virtual bool checkCollision() = 0;
 	virtual void render() = 0;
+	virtual void placeBrick() = 0;
 	//Position Related Methods
 	float getX() { return _xPos; }
 	float getY() { return _yPos; }

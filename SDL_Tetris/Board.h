@@ -14,9 +14,8 @@ public:
 	void update();
 	void render();
 
-	bool checkValidMove(float x, float y);
 
-	bool _board[BOARD_WIDTH][BOARD_HEIGHT];
+	int _board[BOARD_WIDTH][BOARD_HEIGHT];
 
 	SDL_Texture* boardTexture;
 

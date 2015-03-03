@@ -67,7 +67,7 @@ void GameEngine::generateTetrominos()
 			std::cout << "Generated Number: " << generatedNumber << std::endl;
 			switch (generatedNumber) {
 			case 1:
-				_bagOfTetrominos.push_back(new T_Block(_renderer));
+				_bagOfTetrominos.push_back(new T_Block(_renderer, _gameBoard));
 				break;
 			default:
 				break;
@@ -102,7 +102,7 @@ void GameEngine::update()
 void GameEngine::render()
 {
 	// Draw Game Board
-	SDL_RenderCopy(_renderer, _gameBoard->boardTexture, NULL, NULL);
+	_gameBoard->render();
 
 	//Draw Current Tetromino
 	(*_bagOfTetrominos.front()).render();
@@ -122,6 +122,24 @@ void GameEngine::close()
 	SDL_Quit();
 }
 
+bool GameEngine::checkValidMove()
+{
+		// Invalid Move Checks
+	// Check if hits bottom of bucket
+	if (_convertedY == 17) {
+		(*_bagOfTetrominos.front()).placeBrick();
+		_bagOfTetrominos.pop_front();
+		return false;
+	}
+
+	if ((*_bagOfTetrominos.front()).checkCollision()) {
+		(*_bagOfTetrominos.front()).placeBrick();
+		_bagOfTetrominos.pop_front();
+		return false;
+	}
+	return true;
+}
+
 void GameEngine::convertCoord()
 {
 	// Convert X Coordinate
@@ -136,13 +154,8 @@ void GameEngine::convertCoord()
 
 void GameEngine::moveBrick()
 {
-	// Move The Bricks Down the Screen
-	if (_convertedY < 17) {
+	if (checkValidMove()) {
+		//Move Brick Down the Screen
 		(*_bagOfTetrominos.front()).setY((*_bagOfTetrominos.front()).getY() + BLOCK_SIZE);
-	}
-	else {
-		_bagOfTetrominos.pop_front();
-		std::cout << "New Size of Deque is: " << _bagOfTetrominos.size() << std::endl;
-
 	}
 }

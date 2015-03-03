@@ -36,7 +36,7 @@ private:
 	int _convertedY;
 	std::deque<Tetromino*> _bagOfTetrominos;
 
-	void checkCollision();
+	bool checkValidMove();
 	void convertCoord();
 	void generateTetrominos();
 	void moveBrick();
