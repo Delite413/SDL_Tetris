@@ -42,7 +42,32 @@ bool T_Block::checkCollision()
 	return false;
 }
 
-bool T_Block::checkValidLateralMovement()
+bool T_Block::validLeftLateralMovement()
+{
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			if (tBlock[j][i] == 1) {
+
+				targetRect.x = _xPos + (i * Tetromino::_blockSize);
+				targetRect.y = _yPos + (j * Tetromino::_blockSize);
+
+				int checkX = ((targetRect.x - 150) / 16);
+				int checkY = (((targetRect.y - 150) / 16));
+
+				std::cout << checkY << std::endl;
+
+				if (_gameBoard->_board[checkX - 1][checkY] != 0) {
+					return false;
+				}
+
+			}
+				
+		}
+	}
+	return true;
+}
+
+bool T_Block::validRightLateralMovement()
 {
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
@@ -60,11 +85,8 @@ bool T_Block::checkValidLateralMovement()
 					return false;
 				}
 
-				if (_gameBoard->_board[checkX - 1][checkY] != 0) {
-					return false;
-				}
-				
 			}
+
 		}
 	}
 	return true;

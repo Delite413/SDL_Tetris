@@ -15,7 +15,8 @@ public:
 	SDL_Texture* tetrominoTexture;
 
 	bool checkCollision();
-	bool checkValidLateralMovement();
+	bool validLeftLateralMovement();
+	bool validRightLateralMovement();
 	void render();
 	void defineBlock();
 	void placeBrick();

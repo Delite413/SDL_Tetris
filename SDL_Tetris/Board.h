@@ -8,7 +8,7 @@ public:
 	Board(SDL_Renderer* _renderer);
 	~Board();
 
-	static const int BOARD_WIDTH = 10;
+	static const int BOARD_WIDTH = 12;
 	static const int BOARD_HEIGHT = 20;
 
 	void update();

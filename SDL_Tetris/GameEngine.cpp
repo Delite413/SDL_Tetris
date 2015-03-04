@@ -87,12 +87,12 @@ void GameEngine::handleInput()
 			break;
 		case SDL_KEYDOWN:
 			if (evnt.key.keysym.sym == SDLK_RIGHT) {
-				if ((*_bagOfTetrominos.front()).checkValidLateralMovement()) {
+				if ((*_bagOfTetrominos.front()).validRightLateralMovement()) {
 					(*_bagOfTetrominos.front()).setX((*_bagOfTetrominos.front()).getX() + BLOCK_SIZE);
 				}
 			}
 			if (evnt.key.keysym.sym == SDLK_LEFT) {
-				if ((*_bagOfTetrominos.front()).checkValidLateralMovement()) {
+				if ((*_bagOfTetrominos.front()).validLeftLateralMovement()) {
 					(*_bagOfTetrominos.front()).setX((*_bagOfTetrominos.front()).getX() - BLOCK_SIZE);
 				}
 			}
