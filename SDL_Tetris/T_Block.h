@@ -15,12 +15,13 @@ public:
 	SDL_Texture* tetrominoTexture;
 
 	bool checkCollision();
+	void defineBlock();
+	void placeBrick();	
+	void render();
+	void rotate();
+	void update();
 	bool validLeftLateralMovement();
 	bool validRightLateralMovement();
-	void render();
-	void defineBlock();
-	void placeBrick();
-	void update();
 
 	SDL_Rect targetRect;
 
@@ -30,8 +31,6 @@ private:
 
 	Board* _gameBoard;
 	SDL_Renderer* _renderer;
-	SDL_Rect _tetromino;
-
-	
+	SDL_Rect _tetromino;	
 };
 

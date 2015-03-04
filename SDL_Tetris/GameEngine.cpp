@@ -96,6 +96,9 @@ void GameEngine::handleInput()
 					(*_bagOfTetrominos.front()).setX((*_bagOfTetrominos.front()).getX() - BLOCK_SIZE);
 				}
 			}
+			if (evnt.key.keysym.sym == SDLK_UP) {
+				(*_bagOfTetrominos.front()).rotate();
+			}
 			break;
 		default:
 			break;

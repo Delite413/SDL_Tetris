@@ -71,7 +71,7 @@ bool T_Block::validRightLateralMovement()
 {
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
-			if (tBlock[j][i] == 1) {
+			if (tBlock[j][i] != 0) {
 
 				targetRect.x = _xPos + (i * Tetromino::_blockSize);
 				targetRect.y = _yPos + (j * Tetromino::_blockSize);
@@ -96,7 +96,7 @@ void T_Block::render()
 {
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
-			if (tBlock[j][i] != 0) {
+			if (tBlock[j][i] == 1) {
 
 				targetRect.h = Tetromino::_blockHeight;
 				targetRect.w = Tetromino::_blockWidth;
@@ -107,6 +107,56 @@ void T_Block::render()
 				SDL_RenderCopy(_renderer, tetrominoTexture, NULL, &targetRect);
 
 			}
+		}
+	}
+}
+
+void T_Block::rotate()
+{
+	//Holds New Block
+	int tempArray[3][3];
+
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			if (tBlock[j][i] == 1) {
+				
+				//Store Original Point
+				int premodifiedX = j;
+				int premodifiedY = i;
+
+				// Pivot Point
+				int pivotX = 1;
+				int pivotY = 1;
+
+				// Find Relative coords
+				int relativeX = premodifiedX - pivotX;
+				int relativeY = premodifiedY - pivotY;
+
+				// 90 degree Rotation Matrix
+				int rotationTL = 0;
+				int rotationTR = -1;
+				int rotationBL = 1;
+				int rotationBR = 0;
+
+				// Get GLobal Coords Post Rotation
+				int rotatedGlobalX = (rotationTL * relativeX) + (rotationTR * relativeY);
+				int rotatedGlobalY = (rotationBL * relativeX) + (rotationBR * relativeY);
+
+				// Convert to Post Rotation Relative Coords
+				int rotatedRelativeX = rotatedGlobalX + pivotX;
+				int rotatedRelativeY = rotatedGlobalY + pivotY;
+
+				// Fill Temp Array
+				tempArray[rotatedRelativeX][rotatedRelativeY] = 1;
+				// Remove Point from Original Array
+				tBlock[j][i] = 0;
+				}
+			}
+	}
+
+	for (int i = 0; i < 3; i++){
+		for (int j = 0; j < 3; j++){
+			tBlock[i][j] = tempArray[i][j];
 		}
 	}
 }
