@@ -14,7 +14,7 @@ public:
 	GameEngine();
 	~GameEngine();
 
-	static const int BLOCK_SIZE = 16;
+	static const int BLOCK_SIZE = 20;
 
 	bool inGame;
 
@@ -33,13 +33,12 @@ private:
 	Board* _gameBoard;
 	Tetromino* _tetromino;
 
-	int _convertedX;
-	int _convertedY;
 	std::deque<Tetromino*> _bagOfTetrominos;
 
-	bool checkValidMove();
-	void convertCoord();
+	void checkValidMove();
 	void generateTetrominos();
-	void moveBrick();
+
+	void testBlock();
+
 };
 

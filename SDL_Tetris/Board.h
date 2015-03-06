@@ -9,7 +9,9 @@ public:
 	~Board();
 
 	static const int BOARD_WIDTH = 12;
-	static const int BOARD_HEIGHT = 20;
+	static const int BOARD_HEIGHT = 21;
+	static const int SCREEN_X_OFFSET = 150;
+	static const int SCREEN_Y_OFFSET = 150;
 
 	void update();
 	void render();

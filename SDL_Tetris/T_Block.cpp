@@ -1,202 +1,91 @@
 #include "T_Block.h"
-#include <iostream>
 
-
-T_Block::T_Block(SDL_Renderer* _renderer, Board* _gameBoard) : _renderer(_renderer), _gameBoard(_gameBoard)
+T_Block::T_Block(SDL_Renderer* _renderer, Board* _gameBoard) : _renderer(_renderer), _gameBoard(_gameBoard), _pivotCoords(1, 1)
 {
-	_xPos = 214;
-	_yPos = 150;
-	tBlock[0][1] = 1;
-	tBlock[1][1] = 1;
-	tBlock[2][1] = 1;
-	tBlock[1][2] = 1;
-
-	// Create Block Texture
-	defineBlock();
+	// Set Initial Starting Positions
+	_startingXPos = 230;
+	_startingYPos = 150;
+	_x = _startingXPos;
+	_y = _startingYPos;
+	/* 
+	T-Block Map
+	    [0]
+	 [1][2][3]
+	*/
+	blockMap[0][1] = 1;
+	blockMap[1][0] = 1;
+	blockMap[1][1] = 1;
+	blockMap[1][2] = 1;
 }
 
 T_Block::~T_Block()
 {
+
 }
 
 bool T_Block::checkCollision()
 {
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
-			if (tBlock[j][i] == 1) {
+			if (blockMap[j][i] == 1) {
 
-				targetRect.x = _xPos + (i * Tetromino::_blockSize);
-				targetRect.y = _yPos + (j * Tetromino::_blockSize);
+				// Draw Individual Blocks
+				SDL_Rect checkPosition;
 
-				int checkX = ((targetRect.x - 150) / 16);
-				int checkY = (((targetRect.y - 150) / 16) + 1);
+				// Check Below Each Brick
+				checkPosition.x = _x + (i * BLOCK_SIZE);
+				checkPosition.y = _y + (j * BLOCK_SIZE);
 
-				std::cout << checkY << std::endl;
+				Vector2D convertedCoords = convertCoords(checkPosition.x, checkPosition.y);
 
-				if (_gameBoard->_board[checkX][checkY] != 0) {
+				if (_gameBoard->_board[convertedCoords.getX()][convertedCoords.getY() + 1] != 0) {
 					return true;
 				}
+
 			}
 		}
 	}
 	return false;
 }
 
-bool T_Block::validLeftLateralMovement()
+void T_Block::placeBricks()
 {
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
-			if (tBlock[j][i] == 1) {
+			if (blockMap[j][i] == 1) {
 
-				targetRect.x = _xPos + (i * Tetromino::_blockSize);
-				targetRect.y = _yPos + (j * Tetromino::_blockSize);
+				// Draw Individual Blocks
+				SDL_Rect placeBlock;
 
-				int checkX = ((targetRect.x - 150) / 16);
-				int checkY = (((targetRect.y - 150) / 16));
+				placeBlock.x = _x + (i * BLOCK_SIZE);
+				placeBlock.y = _y + (j * BLOCK_SIZE);
 
-				std::cout << checkY << std::endl;
+				Vector2D convertedCoords = convertCoords(placeBlock.x, placeBlock.y);
 
-				if (_gameBoard->_board[checkX - 1][checkY] != 0) {
-					return false;
-				}
-
+				// Set overlapping Squares on Board to 1
+				_gameBoard->_board[convertedCoords.getX()][convertedCoords.getY()] = 1;
 			}
-				
 		}
 	}
-	return true;
-}
-
-bool T_Block::validRightLateralMovement()
-{
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			if (tBlock[j][i] != 0) {
-
-				targetRect.x = _xPos + (i * Tetromino::_blockSize);
-				targetRect.y = _yPos + (j * Tetromino::_blockSize);
-
-				int checkX = ((targetRect.x - 150) / 16);
-				int checkY = (((targetRect.y - 150) / 16));
-
-				std::cout << checkY << std::endl;
-
-				if (_gameBoard->_board[checkX + 1][checkY] != 0) {
-					return false;
-				}
-
-			}
-
-		}
-	}
-	return true;
 }
 
 void T_Block::render()
 {
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
-			if (tBlock[j][i] == 1) {
+			if (blockMap[j][i] == 1) {
 
-				targetRect.h = Tetromino::_blockHeight;
-				targetRect.w = Tetromino::_blockWidth;
-				targetRect.x = _xPos + (i * Tetromino::_blockSize);
-				targetRect.y = _yPos + (j * Tetromino::_blockSize);
-
-				SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 255);
-				SDL_RenderCopy(_renderer, tetrominoTexture, NULL, &targetRect);
-
-			}
-		}
-	}
-}
-
-void T_Block::rotate()
-{
-	//Holds New Block
-	int tempArray[3][3];
-
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			if (tBlock[j][i] == 1) {
+				// Draw Individual Blocks
+				SDL_Rect tBlock_Block;
+				tBlock_Block.h = BLOCK_SIZE;
+				tBlock_Block.w = BLOCK_SIZE;
+				tBlock_Block.x = _x + ( i * BLOCK_SIZE );
+				tBlock_Block.y = _y + ( j * BLOCK_SIZE );
 				
-				//Store Original Point
-				int premodifiedX = j;
-				int premodifiedY = i;
-
-				// Pivot Point
-				int pivotX = 1;
-				int pivotY = 1;
-
-				// Find Relative coords
-				int relativeX = premodifiedX - pivotX;
-				int relativeY = premodifiedY - pivotY;
-
-				// 90 degree Rotation Matrix
-				int rotationTL = 0;
-				int rotationTR = -1;
-				int rotationBL = 1;
-				int rotationBR = 0;
-
-				// Get GLobal Coords Post Rotation
-				int rotatedGlobalX = (rotationTL * relativeX) + (rotationTR * relativeY);
-				int rotatedGlobalY = (rotationBL * relativeX) + (rotationBR * relativeY);
-
-				// Convert to Post Rotation Relative Coords
-				int rotatedRelativeX = rotatedGlobalX + pivotX;
-				int rotatedRelativeY = rotatedGlobalY + pivotY;
-
-				// Fill Temp Array
-				tempArray[rotatedRelativeX][rotatedRelativeY] = 1;
-				// Remove Point from Original Array
-				tBlock[j][i] = 0;
-				}
-			}
-	}
-
-	for (int i = 0; i < 3; i++){
-		for (int j = 0; j < 3; j++){
-			tBlock[i][j] = tempArray[i][j];
-		}
-	}
-}
-
-void T_Block::defineBlock()
-{
-
-	tetrominoTexture = SDL_CreateTexture(_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, Tetromino::_blockWidth, Tetromino::_blockHeight);
-	SDL_SetTextureBlendMode(tetrominoTexture, SDL_BLENDMODE_ADD);
-
-	SDL_Rect tetromino;
-
-	tetromino.x = 0;
-	tetromino.y = 0;
-	tetromino.w = Tetromino::_blockWidth;
-	tetromino.h = Tetromino::_blockHeight;
-
-	_tetromino = tetromino;
-
-	SDL_SetRenderTarget(_renderer, tetrominoTexture);
-	SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 255);
-	SDL_RenderFillRect(_renderer, &tetromino);
-}
-
-void T_Block::placeBrick()
-{
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			if (tBlock[j][i] == 1) {
-
-				targetRect.x = _xPos + (i * Tetromino::_blockSize);
-				targetRect.y = _yPos + (j * Tetromino::_blockSize);
-
-				_gameBoard->_board[((targetRect.x - 150) / 16)][((targetRect.y - 150) / 16)] = 1;
+				// Render Purple T
+				SDL_SetRenderDrawColor(_renderer, 255, 0, 255, 255);
+				SDL_RenderFillRect(_renderer, &tBlock_Block);
 			}
 		}
 	}
-}
-
-void T_Block::update()
-{
-	render();
 }

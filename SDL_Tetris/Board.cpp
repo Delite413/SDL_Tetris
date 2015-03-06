@@ -1,20 +1,24 @@
 #include "Board.h"
 
 
-Board::Board(SDL_Renderer* _renderer) : _renderer(_renderer), _blockSize(16)
+Board::Board(SDL_Renderer* _renderer) : _renderer(_renderer), _blockSize(20)
 {
 	// Create Empty Board
-
-	for (int i = 0; i < BOARD_WIDTH; i++) {
+		for (int i = 0; i < BOARD_WIDTH; i++) {
 		for (int j = 0; j < BOARD_HEIGHT; j++) {
 			_board[i][j] = 0;
 		}
 	}
-	// Create Borders
+	// Create Vertical Borders
 	for (int i = 0; i < BOARD_HEIGHT; i++) {
 			_board[0][i] = 8;
 			_board[11][i] = 8;
 	}
+	//Create Bottom Border
+	for (int i = 0; i < BOARD_WIDTH; i++) {
+		_board[i][20] = 8;
+	}
+
 	// Create Board Texture
 	boardTexture = SDL_CreateTexture(_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, NULL, NULL);
 }
@@ -37,14 +41,14 @@ void Board::render()
 	for (int i = 0; i < BOARD_WIDTH; i++) {
 		for (int j = 0; j < BOARD_HEIGHT; j++) {
 			if (_board[i][j] == 0) {
-				SDL_Rect emptyBlock = { 150 + i * _blockSize, 150 + j * _blockSize, _blockSize, _blockSize };
+				SDL_Rect emptyBlock = { SCREEN_X_OFFSET + i * _blockSize, SCREEN_Y_OFFSET + j * _blockSize, _blockSize, _blockSize };
 				SDL_SetRenderDrawColor(_renderer, 50, 50, 50, 255);
 				SDL_RenderDrawRect(_renderer, &emptyBlock);
 			}
 			else if (_board[i][j] == 1) {
 				// Tetromino Piece 1
-				SDL_Rect t_blockRect = { 150 + i * _blockSize, 150 + j * _blockSize, _blockSize, _blockSize };
-				SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 255);
+				SDL_Rect t_blockRect = { SCREEN_X_OFFSET + i * _blockSize, SCREEN_Y_OFFSET + j * _blockSize, _blockSize, _blockSize };
+				SDL_SetRenderDrawColor(_renderer, 255, 0, 255, 255);
 				SDL_RenderFillRect(_renderer, &t_blockRect);
 			}
 			else if (_board[i][j] == 2) {
@@ -67,7 +71,7 @@ void Board::render()
 			}
 			else if (_board[i][j] == 8) {
 				// Border
-				SDL_Rect borderRect = { 150 + i * _blockSize, 150 + j * _blockSize, _blockSize, _blockSize };
+				SDL_Rect borderRect = { SCREEN_X_OFFSET + i * _blockSize, SCREEN_Y_OFFSET + j * _blockSize, _blockSize, _blockSize };
 				SDL_SetRenderDrawColor(_renderer, 200, 200, 200, 255);
 				SDL_RenderFillRect(_renderer, &borderRect);
 			}

@@ -46,9 +46,21 @@ void GameEngine::gameLoop()
 		handleInput();
 		update();
 		render();
+		testBlock();
 
 		SDL_RenderPresent(_renderer);
 		SDL_Delay(300);
+}
+
+void GameEngine::checkValidMove()
+{
+	if ((*_bagOfTetrominos.front()).checkCollision() == false) {
+		(*_bagOfTetrominos.front()).moveBlock();
+	}
+	else {
+		(*_bagOfTetrominos.front()).placeBricks();
+		_bagOfTetrominos.pop_front();
+	}
 }
 
 void GameEngine::generateTetrominos()
@@ -60,11 +72,11 @@ void GameEngine::generateTetrominos()
 		std::uniform_int_distribution<int> distribution(1, 1);
 
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 3; i++) {
 			int generatedNumber = distribution(generator);
 
 			//Add the Random Tetromino to the Vector
-			std::cout << "Generated Number: " << generatedNumber << std::endl;
+			//std::cout << "Generated Number: " << generatedNumber << std::endl;
 			switch (generatedNumber) {
 			case 1:
 				_bagOfTetrominos.push_back(new T_Block(_renderer, _gameBoard));
@@ -87,17 +99,12 @@ void GameEngine::handleInput()
 			break;
 		case SDL_KEYDOWN:
 			if (evnt.key.keysym.sym == SDLK_RIGHT) {
-				if ((*_bagOfTetrominos.front()).validRightLateralMovement()) {
-					(*_bagOfTetrominos.front()).setX((*_bagOfTetrominos.front()).getX() + BLOCK_SIZE);
-				}
+				(*_bagOfTetrominos.front()).setX((*_bagOfTetrominos.front()).getX() + BLOCK_SIZE);
 			}
 			if (evnt.key.keysym.sym == SDLK_LEFT) {
-				if ((*_bagOfTetrominos.front()).validLeftLateralMovement()) {
-					(*_bagOfTetrominos.front()).setX((*_bagOfTetrominos.front()).getX() - BLOCK_SIZE);
-				}
+				(*_bagOfTetrominos.front()).setX((*_bagOfTetrominos.front()).getX() - BLOCK_SIZE);
 			}
 			if (evnt.key.keysym.sym == SDLK_UP) {
-				(*_bagOfTetrominos.front()).rotate();
 			}
 			break;
 		default:
@@ -109,10 +116,8 @@ void GameEngine::handleInput()
 void GameEngine::update()
 {
 	_gameBoard->update();
-	// Test Code
-	convertCoord();
-	//
-	moveBrick();
+	checkValidMove();
+
 }
 
 void GameEngine::render()
@@ -120,7 +125,7 @@ void GameEngine::render()
 	// Draw Game Board
 	_gameBoard->render();
 
-	//Draw Current Tetromino
+	// Draw Active Tetromino
 	(*_bagOfTetrominos.front()).render();
 
 }
@@ -137,39 +142,17 @@ void GameEngine::close()
 	SDL_Quit();
 }
 
-bool GameEngine::checkValidMove()
+void GameEngine::testBlock()
 {
-		// Invalid Move Checks
-	// Check if hits bottom of bucket
-	if (_convertedY == 17) {
-		(*_bagOfTetrominos.front()).placeBrick();
-		_bagOfTetrominos.pop_front();
-		return false;
-	}
+	// Test Outputs
 
-	// Checks for Collisions
-	if ((*_bagOfTetrominos.front()).checkCollision()) {
-		(*_bagOfTetrominos.front()).placeBrick();
-		_bagOfTetrominos.pop_front();
-		return false;
-	}
+		// Pivot Coordinates
+		//Vector2D pivotCoords = (*_bagOfTetrominos.front()).getPivotCoords();
+		//std::cout << pivotCoords.getX() << ", " << pivotCoords.getY() << std::endl;
 
-	return true;
-}
+		// BlockMap Values
+		//std::cout << (*_bagOfTetrominos.front()).blockMap[0][1] << std::endl;
 
-void GameEngine::convertCoord()
-{
-	// Convert X Coordinate
-	_convertedX = ((*_bagOfTetrominos.front()).getX() - 150) / 16;
-
-	// Converted Y Coordinate
-	_convertedY = ((*_bagOfTetrominos.front()).getY() - 150) / 16;
-}
-
-void GameEngine::moveBrick()
-{
-	if (checkValidMove()) {
-		//Move Brick Down the Screen
-		(*_bagOfTetrominos.front()).setY((*_bagOfTetrominos.front()).getY() + BLOCK_SIZE);
-	}
+		// Starting Position Check
+		std::cout << "(" << (*_bagOfTetrominos.front()).getX() << ", " << (*_bagOfTetrominos.front()).getY() << ")" << std::endl;
 }

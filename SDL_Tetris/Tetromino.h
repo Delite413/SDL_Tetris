@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL/SDL.h>
-#include <deque>
-#include "Board.h"
+
+#include "Vector2D.h"
 
 class Tetromino
 {
@@ -9,29 +9,34 @@ public:
 	Tetromino();
 	virtual ~Tetromino();
 
-	//Virtual Functions
-	virtual bool checkCollision() = 0;
-	virtual void render() = 0;
-	virtual void placeBrick() = 0;
-	virtual void rotate() = 0;
-	virtual bool validLeftLateralMovement() = 0;
-	virtual bool validRightLateralMovement() = 0;
-	//Position Related Methods
-	float getX() { return _xPos; }
-	float getY() { return _yPos; }
-	void setX(float newXPos) { _xPos = newXPos; }
-	void setY(float newYPos) { _yPos = newYPos;	}
+	int blockMap[3][3];
+	
+	// Virtual Methods
+	virtual bool     checkCollision() = 0; 
+	virtual Vector2D getPivotCoords() = 0;
+	virtual void	 placeBricks() = 0;
+	virtual void     render() = 0;
 
+	// Native Method
+	Vector2D		 convertCoords(int x, int y);
+	int              getX() { return _x; }
+	int              getY() { return _y; }
+	int              getStartingX() { return _startingXPos; }
+	int              getStartingY() { return _startingYPos; }
+	void             moveBlock();
+	void             setX(int x) { _x = x; }
+	void             setY(int y) { _y = y; }
+	void			 update();
+	
 protected:
+	const int BLOCK_SIZE = 20;
 
-	float _xPos;
-	float _yPos;
+	int _x;
+	int _y;
 
-	unsigned int _blockSize = 16;
-	unsigned int _blockWidth  = 16;
-	unsigned int _blockHeight = 16;
+	int _startingXPos;
+	int _startingYPos;
 
 private:
-	
 };
 
