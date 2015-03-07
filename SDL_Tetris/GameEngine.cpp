@@ -105,6 +105,7 @@ void GameEngine::handleInput()
 				(*_bagOfTetrominos.front()).setX((*_bagOfTetrominos.front()).getX() - BLOCK_SIZE);
 			}
 			if (evnt.key.keysym.sym == SDLK_UP) {
+				(*_bagOfTetrominos.front()).rotateClockwise();
 			}
 			break;
 		default:
@@ -145,10 +146,6 @@ void GameEngine::close()
 void GameEngine::testBlock()
 {
 	// Test Outputs
-
-		// Pivot Coordinates
-		//Vector2D pivotCoords = (*_bagOfTetrominos.front()).getPivotCoords();
-		//std::cout << pivotCoords.getX() << ", " << pivotCoords.getY() << std::endl;
 
 		// BlockMap Values
 		//std::cout << (*_bagOfTetrominos.front()).blockMap[0][1] << std::endl;

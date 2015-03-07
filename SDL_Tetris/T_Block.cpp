@@ -1,12 +1,14 @@
 #include "T_Block.h"
 
-T_Block::T_Block(SDL_Renderer* _renderer, Board* _gameBoard) : _renderer(_renderer), _gameBoard(_gameBoard), _pivotCoords(1, 1)
+T_Block::T_Block(SDL_Renderer* _renderer, Board* _gameBoard) : _renderer(_renderer), _gameBoard(_gameBoard)
 {
 	// Set Initial Starting Positions
 	_startingXPos = 230;
 	_startingYPos = 150;
 	_x = _startingXPos;
 	_y = _startingYPos;
+	_blockMapWidth = 3;
+	_blockMapHeight = 3;
 	/* 
 	T-Block Map
 	    [0]
@@ -14,7 +16,7 @@ T_Block::T_Block(SDL_Renderer* _renderer, Board* _gameBoard) : _renderer(_render
 	*/
 	blockMap[0][1] = 1;
 	blockMap[1][0] = 1;
-	blockMap[1][1] = 1;
+	blockMap[1][1] = 2;
 	blockMap[1][2] = 1;
 }
 
@@ -25,9 +27,9 @@ T_Block::~T_Block()
 
 bool T_Block::checkCollision()
 {
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			if (blockMap[j][i] == 1) {
+	for (int i = 0; i < _blockMapHeight; i++) {
+		for (int j = 0; j < _blockMapWidth; j++) {
+			if (blockMap[j][i] != 0) {
 
 				// Draw Individual Blocks
 				SDL_Rect checkPosition;
@@ -50,9 +52,9 @@ bool T_Block::checkCollision()
 
 void T_Block::placeBricks()
 {
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			if (blockMap[j][i] == 1) {
+	for (int i = 0; i < _blockMapHeight; i++) {
+		for (int j = 0; j < _blockMapWidth; j++) {
+			if (blockMap[j][i] != 0) {
 
 				// Draw Individual Blocks
 				SDL_Rect placeBlock;
@@ -71,9 +73,9 @@ void T_Block::placeBricks()
 
 void T_Block::render()
 {
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			if (blockMap[j][i] == 1) {
+	for (int i = 0; i < _blockMapHeight; i++) {
+		for (int j = 0; j < _blockMapWidth; j++) {
+			if (blockMap[j][i] != 0) {
 
 				// Draw Individual Blocks
 				SDL_Rect tBlock_Block;

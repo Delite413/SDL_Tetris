@@ -13,7 +13,6 @@ public:
 	
 	// Virtual Methods
 	virtual bool     checkCollision() = 0; 
-	virtual Vector2D getPivotCoords() = 0;
 	virtual void	 placeBricks() = 0;
 	virtual void     render() = 0;
 
@@ -24,6 +23,7 @@ public:
 	int              getStartingX() { return _startingXPos; }
 	int              getStartingY() { return _startingYPos; }
 	void             moveBlock();
+	void             rotateClockwise();
 	void             setX(int x) { _x = x; }
 	void             setY(int y) { _y = y; }
 	void			 update();
@@ -31,9 +31,10 @@ public:
 protected:
 	const int BLOCK_SIZE = 20;
 
+	int _blockMapWidth;
+	int _blockMapHeight;
 	int _x;
 	int _y;
-
 	int _startingXPos;
 	int _startingYPos;
 

@@ -13,14 +13,12 @@ public:
 	~T_Block();
 
 	bool     checkCollision();
-	Vector2D getPivotCoords() { return _pivotCoords; }
 	void     placeBricks();
 	void     render();
 
 private:
 	Board* _gameBoard;
 	SDL_Renderer* _renderer;
-	Vector2D _pivotCoords;
 
 };
 
