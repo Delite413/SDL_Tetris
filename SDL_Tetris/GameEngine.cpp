@@ -103,7 +103,7 @@ void GameEngine::handleInput()
 				}
 			}
 			if (evnt.key.keysym.sym == SDLK_UP) {
-					(*_bagOfTetrominos.front()).rotateClockwise();
+				(*_bagOfTetrominos.front()).rotateClockwise();
 			}
 			break;
 		default:
@@ -122,6 +122,7 @@ void GameEngine::update()
 	else {
 		(*_bagOfTetrominos.front()).moveBlock();
 	}
+	_gameBoard->checkForLines();
 }
 
 void GameEngine::render()

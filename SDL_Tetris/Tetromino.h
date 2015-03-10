@@ -3,19 +3,22 @@
 
 #include "Vector2D.h"
 
+enum class BlockState {UP,RIGHT,LEFT,DOWN};
+
 class Tetromino
 {
 public:
 	Tetromino();
 	virtual ~Tetromino();
 
-	int			  blockMap[3][3];
-	
+	int				 blockMap[4][4];
+
 	// Virtual Methods
 	virtual bool     checkCollision(int xPos, int yPos) = 0;
-	virtual Vector2D checkRotationCollision(int xPos, int yPos) = 0;
+	virtual void     copyToBlockMap(int tempArray[4][4]) = 0;
 	virtual void	 placeBricks() = 0;
 	virtual void     render() = 0;
+	virtual void     rotateClockwise() = 0;
 
 	// Native Method
 	Vector2D		 convertCoords(int x, int y);
@@ -24,7 +27,6 @@ public:
 	int              getStartingX() { return _startingXPos; }
 	int              getStartingY() { return _startingYPos; }
 	void             moveBlock();
-	void             rotateClockwise();
 	void             setX(int x) { _x = x; }
 	void             setY(int y) { _y = y; }
 	void			 update();
@@ -38,6 +40,8 @@ protected:
 	int _y;
 	int _startingXPos;
 	int _startingYPos;
+
+	BlockState blockState;
 
 private:
 };

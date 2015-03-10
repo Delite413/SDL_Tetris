@@ -13,9 +13,18 @@ public:
 	~T_Block();
 
 	bool     checkCollision(int xPos, int yPos);
-	Vector2D checkRotationCollision(int xPos, int yPos);
+	bool     checkRotationCollision(int xPos, int yPos, int tempArray[4][4]);
+	void	 copyToBlockMap(int tempArray[4][4]);
 	void     placeBricks();
 	void     render();
+	void	 rotateClockwise();
+
+	//Wall Kick Checks
+
+	void	 upToRight(int tempBlockMap[4][4], int tempArray[4][4]);
+	void	 rightToDown(int tempBlockMap[4][4], int tempArray[4][4]);
+	void	 downToLeft(int tempBlockMap[4][4], int tempArray[4][4]);
+	void	 leftToUp(int tempBlockMap[4][4], int tempArray[4][4]);
 
 private:
 	Board* _gameBoard;

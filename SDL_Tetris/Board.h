@@ -13,13 +13,14 @@ public:
 	static const int SCREEN_X_OFFSET = 150;
 	static const int SCREEN_Y_OFFSET = 150;
 
-	void update();
-	void render();
-
-
 	int _board[BOARD_WIDTH][BOARD_HEIGHT];
 
 	SDL_Texture* boardTexture;
+
+	void checkForLines();
+	void deleteLine(int line);
+	void render();
+	void update();
 
 private:
 	unsigned int _blockSize;

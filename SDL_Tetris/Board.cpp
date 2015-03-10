@@ -1,12 +1,14 @@
 #include "Board.h"
 
+#include <iostream>
+
 
 Board::Board(SDL_Renderer* _renderer) : _renderer(_renderer), _blockSize(20)
 {
 	// Create Empty Board
 		for (int i = 0; i < BOARD_WIDTH; i++) {
-		for (int j = 0; j < BOARD_HEIGHT; j++) {
-			_board[i][j] = 0;
+			for (int j = 0; j < BOARD_HEIGHT; j++) {
+				_board[i][j] = 0;
 		}
 	}
 	// Create Vertical Borders
@@ -30,6 +32,33 @@ Board::~Board()
 void Board::update()
 {
 	render();
+}
+
+void Board::checkForLines()
+{
+
+	for (int i = 0; i < 20; i++) {
+		int filledBlocks = 0;
+
+		for (int j = 1; j < 11 ; j++) {
+			if (_board[j][i] != 0) {
+				++filledBlocks;
+			}
+
+			if (filledBlocks == 10) {
+				deleteLine(i);
+			}
+		}
+	}
+}
+
+void Board::deleteLine(int line)
+{
+	for (int i = line; i > 0; i--) {
+		for (int j = 1; j < BOARD_WIDTH - 1; j++) {
+			_board[j][i] = _board[j][i-1];
+		}
+	}
 }
 
 void Board::render()
