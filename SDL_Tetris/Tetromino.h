@@ -27,7 +27,7 @@ public:
 	int              getStartingX() { return _startingXPos; }
 	int              getStartingY() { return _startingYPos; }
 	void             moveBlock();
-	void			 placeBricks(Board* _gameBoard);
+	void			 placeBricks(Board* _gameBoard, const type_info &type);
 	void			 rotateClockwise(Board* _gameBoard);
 	void             setX(int x) { _x = x; }
 	void             setY(int y) { _y = y; }

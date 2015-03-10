@@ -1,7 +1,9 @@
 #include "Tetromino.h"
+#include "J_Block.h"
 #include "T_Block.h"
 
 #include <iostream>
+#include <typeinfo>
 
 Tetromino::Tetromino() : blockState(BlockState::UP)
 {
@@ -23,7 +25,7 @@ void Tetromino::moveBlock()
 	this->setY(this->getY() + 20);
 }
 
-void Tetromino::placeBricks(Board* _gameBoard)
+void Tetromino::placeBricks(Board* _gameBoard, const type_info &type)
 {
 	for (int i = 0; i < _blockMapHeight; i++) {
 		for (int j = 0; j < _blockMapWidth; j++) {
@@ -38,7 +40,12 @@ void Tetromino::placeBricks(Board* _gameBoard)
 				Vector2D convertedCoords = convertCoords(placeBlock.x, placeBlock.y);
 
 				// Set overlapping Squares on Board to 1
-				_gameBoard->_board[convertedCoords.getX()][convertedCoords.getY()] = 1;
+				if (type == typeid(T_Block)) {
+					_gameBoard->_board[convertedCoords.getX()][convertedCoords.getY()] = 1;
+				}
+				else if (type == typeid(J_Block)) {
+					_gameBoard->_board[convertedCoords.getX()][convertedCoords.getY()] = 2;
+				}
 			}
 		}
 	}

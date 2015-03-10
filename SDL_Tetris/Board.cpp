@@ -82,6 +82,9 @@ void Board::render()
 			}
 			else if (_board[i][j] == 2) {
 				// Tetromino Piece 2
+				SDL_Rect j_blockRect = { SCREEN_X_OFFSET + i * _blockSize, SCREEN_Y_OFFSET + j * _blockSize, _blockSize, _blockSize };
+				SDL_SetRenderDrawColor(_renderer, 0, 0, 255, 255);
+				SDL_RenderFillRect(_renderer, &j_blockRect);
 			}
 			else if (_board[i][j] == 3) {
 				// Tetromino Piece 3

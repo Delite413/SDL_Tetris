@@ -57,7 +57,7 @@ void GameEngine::generateTetrominos()
 		//Create a Random Number between 1 and 7 ( 1 for Each Shape )
 		std::random_device rd;
 		std::default_random_engine generator(rd());
-		std::uniform_int_distribution<int> distribution(1, 1);
+		std::uniform_int_distribution<int> distribution(1, 2);
 
 
 		for (int i = 0; i < 3; i++) {
@@ -69,6 +69,8 @@ void GameEngine::generateTetrominos()
 			case 1:
 				_bagOfTetrominos.push_back(new T_Block(_renderer, _gameBoard));
 				break;
+			case 2:
+				_bagOfTetrominos.push_back(new J_Block(_renderer, _gameBoard));
 			default:
 				break;
 			}
@@ -116,7 +118,7 @@ void GameEngine::update()
 {
 	_gameBoard->update();
 	if ((*_bagOfTetrominos.front()).checkCollision((*_bagOfTetrominos.front()).getX(), (*_bagOfTetrominos.front()).getY() + BLOCK_SIZE, _gameBoard)) {
-		(*_bagOfTetrominos.front()).placeBricks(_gameBoard);
+		(*_bagOfTetrominos.front()).placeBricks(_gameBoard, typeid((*_bagOfTetrominos.front())));
 		_bagOfTetrominos.pop_front();
 	}
 	else {
