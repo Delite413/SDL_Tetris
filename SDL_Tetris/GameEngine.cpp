@@ -1,4 +1,7 @@
 #include "GameEngine.h"
+#include "J_Block.h"
+#include "S_Block.h"
+#include "T_Block.h"
 #include <iostream>
 
 
@@ -57,7 +60,7 @@ void GameEngine::generateTetrominos()
 		//Create a Random Number between 1 and 7 ( 1 for Each Shape )
 		std::random_device rd;
 		std::default_random_engine generator(rd());
-		std::uniform_int_distribution<int> distribution(1, 2);
+		std::uniform_int_distribution<int> distribution(1, 3);
 
 
 		for (int i = 0; i < 3; i++) {
@@ -71,6 +74,10 @@ void GameEngine::generateTetrominos()
 				break;
 			case 2:
 				_bagOfTetrominos.push_back(new J_Block(_renderer, _gameBoard));
+				break;
+			case 3:
+				_bagOfTetrominos.push_back(new S_Block(_renderer, _gameBoard));
+				break;
 			default:
 				break;
 			}

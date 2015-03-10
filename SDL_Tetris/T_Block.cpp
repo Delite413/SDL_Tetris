@@ -5,7 +5,7 @@ T_Block::T_Block(SDL_Renderer* _renderer, Board* _gameBoard) : _renderer(_render
 {
 	// Set Initial Starting Positions
 	_startingXPos = 230;
-	_startingYPos = 150;
+	_startingYPos = 110;
 	_x = _startingXPos;
 	_y = _startingYPos;
 	_blockMapWidth = 4;

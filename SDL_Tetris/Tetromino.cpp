@@ -1,5 +1,6 @@
 #include "Tetromino.h"
 #include "J_Block.h"
+#include "S_Block.h"
 #include "T_Block.h"
 
 #include <iostream>
@@ -45,6 +46,9 @@ void Tetromino::placeBricks(Board* _gameBoard, const type_info &type)
 				}
 				else if (type == typeid(J_Block)) {
 					_gameBoard->_board[convertedCoords.getX()][convertedCoords.getY()] = 2;
+				}
+				else if (type == typeid(S_Block)) {
+					_gameBoard->_board[convertedCoords.getX()][convertedCoords.getY()] = 3;
 				}
 			}
 		}
