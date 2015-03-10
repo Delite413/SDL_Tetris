@@ -1,5 +1,6 @@
 #include "T_Block.h"
 
+#include <iostream>
 T_Block::T_Block(SDL_Renderer* _renderer, Board* _gameBoard) : _renderer(_renderer), _gameBoard(_gameBoard)
 {
 	// Set Initial Starting Positions
@@ -25,7 +26,7 @@ T_Block::~T_Block()
 
 }
 
-bool T_Block::checkCollision()
+bool T_Block::checkCollision(int xPos, int yPos)
 {
 	for (int i = 0; i < _blockMapHeight; i++) {
 		for (int j = 0; j < _blockMapWidth; j++) {
@@ -34,20 +35,26 @@ bool T_Block::checkCollision()
 				// Draw Individual Blocks
 				SDL_Rect checkPosition;
 
-				// Check Below Each Brick
-				checkPosition.x = _x + (i * BLOCK_SIZE);
-				checkPosition.y = _y + (j * BLOCK_SIZE);
+				// Check Each Brick
+				checkPosition.x = xPos + (i * BLOCK_SIZE);
+				checkPosition.y = yPos + (j * BLOCK_SIZE);
 
 				Vector2D convertedCoords = convertCoords(checkPosition.x, checkPosition.y);
 
-				if (_gameBoard->_board[convertedCoords.getX()][convertedCoords.getY() + 1] != 0) {
+				if (_gameBoard->_board[convertedCoords.getX()][convertedCoords.getY()] != 0) {
+					std::cout << "Collision Detected!" << std::endl;
 					return true;
 				}
-
 			}
 		}
 	}
 	return false;
+}
+
+Vector2D T_Block::checkRotationCollision(int xPos, int yPos)
+{
+	Vector2D transformedBlock(1, 1);
+	return transformedBlock;
 }
 
 void T_Block::placeBricks()

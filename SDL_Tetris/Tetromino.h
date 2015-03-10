@@ -9,10 +9,11 @@ public:
 	Tetromino();
 	virtual ~Tetromino();
 
-	int blockMap[3][3];
+	int			  blockMap[3][3];
 	
 	// Virtual Methods
-	virtual bool     checkCollision() = 0; 
+	virtual bool     checkCollision(int xPos, int yPos) = 0;
+	virtual Vector2D checkRotationCollision(int xPos, int yPos) = 0;
 	virtual void	 placeBricks() = 0;
 	virtual void     render() = 0;
 

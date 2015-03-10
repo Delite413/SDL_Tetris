@@ -7,8 +7,8 @@
 Tetromino::Tetromino()
 {
 	// Set all Values of blockMap to 0
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
+	for (int i = 0; i < _blockMapHeight; i++) {
+		for (int j = 0; j < _blockMapHeight; j++) {
 			blockMap[j][i] = 0;
 		}
 	}
@@ -79,7 +79,6 @@ void Tetromino::rotateClockwise()
 
 				//Clear current Position
 				blockMap[j][i] = 0;
-
 			}
 		}
 	}
@@ -92,7 +91,6 @@ void Tetromino::rotateClockwise()
 			blockMap[j][i] = tempArray[j][i];
 		}
 	}
-
 }
 
 void Tetromino::update()

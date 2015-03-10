@@ -35,10 +35,6 @@ private:
 
 	std::deque<Tetromino*> _bagOfTetrominos;
 
-	void checkValidMove();
 	void generateTetrominos();
-
-	void testBlock();
-
 };
 

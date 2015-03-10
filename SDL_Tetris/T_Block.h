@@ -12,7 +12,8 @@ public:
 	T_Block(SDL_Renderer* _renderer, Board* _gameBoard);
 	~T_Block();
 
-	bool     checkCollision();
+	bool     checkCollision(int xPos, int yPos);
+	Vector2D checkRotationCollision(int xPos, int yPos);
 	void     placeBricks();
 	void     render();
 

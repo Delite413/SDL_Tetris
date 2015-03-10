@@ -17,7 +17,7 @@ void GameEngine::run()
 	while (inGame) {
 		gameLoop();
 	}
-	
+
 	close();
 }
 
@@ -38,29 +38,17 @@ void GameEngine::init()
 
 void GameEngine::gameLoop()
 {
-		SDL_SetRenderTarget(_renderer, NULL);
-		SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 0);
-		SDL_RenderClear(_renderer);
+	SDL_SetRenderTarget(_renderer, NULL);
+	SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 0);
+	SDL_RenderClear(_renderer);
 
-		generateTetrominos();
-		handleInput();
-		update();
-		render();
-		testBlock();
+	generateTetrominos();
+	handleInput();
+	update();
+	render();
 
-		SDL_RenderPresent(_renderer);
-		SDL_Delay(300);
-}
-
-void GameEngine::checkValidMove()
-{
-	if ((*_bagOfTetrominos.front()).checkCollision() == false) {
-		(*_bagOfTetrominos.front()).moveBlock();
-	}
-	else {
-		(*_bagOfTetrominos.front()).placeBricks();
-		_bagOfTetrominos.pop_front();
-	}
+	SDL_RenderPresent(_renderer);
+	SDL_Delay(300);
 }
 
 void GameEngine::generateTetrominos()
@@ -99,13 +87,23 @@ void GameEngine::handleInput()
 			break;
 		case SDL_KEYDOWN:
 			if (evnt.key.keysym.sym == SDLK_RIGHT) {
-				(*_bagOfTetrominos.front()).setX((*_bagOfTetrominos.front()).getX() + BLOCK_SIZE);
+				if ((*_bagOfTetrominos.front()).checkCollision((*_bagOfTetrominos.front()).getX() + BLOCK_SIZE, (*_bagOfTetrominos.front()).getY())) {
+					// Do Nothing
+				}
+				else {
+					(*_bagOfTetrominos.front()).setX((*_bagOfTetrominos.front()).getX() + BLOCK_SIZE);
+				}
 			}
 			if (evnt.key.keysym.sym == SDLK_LEFT) {
-				(*_bagOfTetrominos.front()).setX((*_bagOfTetrominos.front()).getX() - BLOCK_SIZE);
+				if ((*_bagOfTetrominos.front()).checkCollision((*_bagOfTetrominos.front()).getX() - BLOCK_SIZE, (*_bagOfTetrominos.front()).getY())) {
+					 // Do Nothing
+				}
+				else {
+					(*_bagOfTetrominos.front()).setX((*_bagOfTetrominos.front()).getX() - BLOCK_SIZE);
+				}
 			}
 			if (evnt.key.keysym.sym == SDLK_UP) {
-				(*_bagOfTetrominos.front()).rotateClockwise();
+					(*_bagOfTetrominos.front()).rotateClockwise();
 			}
 			break;
 		default:
@@ -117,8 +115,13 @@ void GameEngine::handleInput()
 void GameEngine::update()
 {
 	_gameBoard->update();
-	checkValidMove();
-
+	if ((*_bagOfTetrominos.front()).checkCollision((*_bagOfTetrominos.front()).getX(), (*_bagOfTetrominos.front()).getY() + BLOCK_SIZE)) {
+		(*_bagOfTetrominos.front()).placeBricks();
+		_bagOfTetrominos.pop_front();
+	}
+	else {
+		(*_bagOfTetrominos.front()).moveBlock();
+	}
 }
 
 void GameEngine::render()
@@ -141,15 +144,4 @@ void GameEngine::close()
 	SDL_DestroyWindow(_window);
 	_window = nullptr;
 	SDL_Quit();
-}
-
-void GameEngine::testBlock()
-{
-	// Test Outputs
-
-		// BlockMap Values
-		//std::cout << (*_bagOfTetrominos.front()).blockMap[0][1] << std::endl;
-
-		// Starting Position Check
-		std::cout << "(" << (*_bagOfTetrominos.front()).getX() << ", " << (*_bagOfTetrominos.front()).getY() << ")" << std::endl;
 }
