@@ -1,7 +1,10 @@
 #include "GameEngine.h"
 #include "J_Block.h"
+#include "L_Block.h"
 #include "S_Block.h"
 #include "T_Block.h"
+#include "Z_Block.h"
+
 #include <iostream>
 
 
@@ -60,23 +63,29 @@ void GameEngine::generateTetrominos()
 		//Create a Random Number between 1 and 7 ( 1 for Each Shape )
 		std::random_device rd;
 		std::default_random_engine generator(rd());
-		std::uniform_int_distribution<int> distribution(1, 3);
+		std::uniform_int_distribution<int> distribution(1, 5);
 
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 5; i++) {
 			int generatedNumber = distribution(generator);
 
 			//Add the Random Tetromino to the Vector
 			//std::cout << "Generated Number: " << generatedNumber << std::endl;
 			switch (generatedNumber) {
 			case 1:
-				_bagOfTetrominos.push_back(new T_Block(_renderer, _gameBoard));
+				_bagOfTetrominos.emplace_back(std::make_unique<T_Block>(_renderer, _gameBoard));
 				break;
 			case 2:
-				_bagOfTetrominos.push_back(new J_Block(_renderer, _gameBoard));
+				_bagOfTetrominos.emplace_back(std::make_unique<J_Block>(_renderer, _gameBoard));
 				break;
 			case 3:
-				_bagOfTetrominos.push_back(new S_Block(_renderer, _gameBoard));
+				_bagOfTetrominos.emplace_back(std::make_unique<S_Block>(_renderer, _gameBoard));
+				break;
+			case 4:
+				_bagOfTetrominos.emplace_back(std::make_unique<Z_Block>(_renderer, _gameBoard));
+				break;
+			case 5:
+				_bagOfTetrominos.emplace_back(std::make_unique<L_Block>(_renderer, _gameBoard));
 				break;
 			default:
 				break;

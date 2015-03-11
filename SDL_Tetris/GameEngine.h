@@ -2,6 +2,7 @@
 
 #include <SDL/SDL.h>
 #include <deque>
+#include <memory>
 #include <random>
 
 #include "Board.h"
@@ -32,7 +33,7 @@ private:
 	Board* _gameBoard;
 	Tetromino* _tetromino;
 
-	std::deque<Tetromino*> _bagOfTetrominos;
+	std::deque<std::shared_ptr<Tetromino>> _bagOfTetrominos;
 
 	void generateTetrominos();
 };
