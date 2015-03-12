@@ -28,20 +28,22 @@ Z_Block::~Z_Block()
 
 void Z_Block::render()
 {
-	for (int i = 0; i < _blockMapHeight; i++) {
+	for (int i = 0; i < _blockMapHeight; ++i) {
 		for (int j = 0; j < _blockMapWidth; j++) {
 			if (blockMap[j][i] != 0) {
 
 				// Draw Individual Blocks
-				SDL_Rect tBlock_Block;
-				tBlock_Block.h = BLOCK_SIZE;
-				tBlock_Block.w = BLOCK_SIZE;
-				tBlock_Block.x = _x + (i * BLOCK_SIZE);
-				tBlock_Block.y = _y + (j * BLOCK_SIZE);
+				SDL_Rect zBlock_Block;
+				zBlock_Block.h = BLOCK_SIZE;
+				zBlock_Block.w = BLOCK_SIZE;
+				zBlock_Block.x = _x + (i * BLOCK_SIZE);
+				zBlock_Block.y = _y + (j * BLOCK_SIZE);
 
 				// Render Purple T
 				SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 255);
-				SDL_RenderFillRect(_renderer, &tBlock_Block);
+				SDL_RenderFillRect(_renderer, &zBlock_Block);
+				SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
+				SDL_RenderDrawRect(_renderer, &zBlock_Block);
 			}
 		}
 	}

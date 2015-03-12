@@ -1,6 +1,8 @@
 #include "Tetromino.h"
+#include "I_Block.h"
 #include "J_Block.h"
 #include "L_Block.h"
+#include "O_Block.h"
 #include "S_Block.h"
 #include "T_Block.h"
 #include "Z_Block.h"
@@ -11,7 +13,7 @@
 Tetromino::Tetromino() : blockState(BlockState::UP)
 {
 	// Set all Values of blockMap to 0
-	for (int i = 0; i < _blockMapHeight; i++) {
+	for (int i = 0; i < _blockMapHeight; ++i) {
 		for (int j = 0; j < _blockMapHeight; j++) {
 			blockMap[j][i] = 0;
 		}
@@ -30,7 +32,7 @@ void Tetromino::moveBlock()
 
 void Tetromino::placeBricks(Board* _gameBoard, const type_info &type)
 {
-	for (int i = 0; i < _blockMapHeight; i++) {
+	for (int i = 0; i < _blockMapHeight; ++i) {
 		for (int j = 0; j < _blockMapWidth; j++) {
 			if (blockMap[j][i] != 0) {
 
@@ -58,6 +60,12 @@ void Tetromino::placeBricks(Board* _gameBoard, const type_info &type)
 				else if (type == typeid(L_Block)) {
 					_gameBoard->_board[convertedCoords.getX()][convertedCoords.getY()] = 5;
 				}
+				else if (type == typeid(I_Block)) {
+					_gameBoard->_board[convertedCoords.getX()][convertedCoords.getY()] = 6;
+				}
+				else if (type == typeid(O_Block)) {
+					_gameBoard->_board[convertedCoords.getX()][convertedCoords.getY()] = 7;
+				}
 			}
 		}
 	}
@@ -66,14 +74,14 @@ void Tetromino::placeBricks(Board* _gameBoard, const type_info &type)
 void Tetromino::rotateClockwise(Board* _gameBoard)
 {
 	// Create Temporary Array and Initialize everything to 0
-	int tempArray[4][4] = {};
-	int tempBlockMap[4][4] = {};
+	int tempArray[5][5] = {};
+	int tempBlockMap[5][5] = {};
 
 	//Pivot Point Declaration
 	Vector2D pivotPoint;
 
 	// Find Pivot Point
-	for (int i = 0; i < _blockMapHeight; i++) {
+	for (int i = 0; i < _blockMapHeight; ++i) {
 		for (int j = 0; j < _blockMapWidth; j++) {
 			if (blockMap[j][i] == 2) {
 				pivotPoint.setX(j);
@@ -83,7 +91,7 @@ void Tetromino::rotateClockwise(Board* _gameBoard)
 	}
 
 	// Rotate All Other Squares
-	for (int i = 0; i < _blockMapHeight; i++) {
+	for (int i = 0; i < _blockMapHeight; ++i) {
 		for (int j = 0; j < _blockMapWidth; j++) {
 			if (blockMap[j][i] == 1) {
 
@@ -149,7 +157,7 @@ void Tetromino::update()
 {
 }
 
-void Tetromino::upToRight(int tempBlockMap[4][4], int tempArray[4][4], Board* _gameBoard)
+void Tetromino::upToRight(int tempBlockMap[5][5], int tempArray[5][5], Board* _gameBoard)
 {
 	// Check (0,0)
 	if (checkRotationCollision(_x, _y, tempArray, _gameBoard) == false) {
@@ -184,7 +192,7 @@ void Tetromino::upToRight(int tempBlockMap[4][4], int tempArray[4][4], Board* _g
 	blockState = BlockState::RIGHT;
 }
 
-void Tetromino::rightToDown(int tempBlockMap[4][4], int tempArray[4][4], Board* _gameBoard)
+void Tetromino::rightToDown(int tempBlockMap[5][5], int tempArray[5][5], Board* _gameBoard)
 {
 	// Check (0,0)
 	if (checkRotationCollision(_x, _y, tempArray, _gameBoard) == false) {
@@ -219,7 +227,7 @@ void Tetromino::rightToDown(int tempBlockMap[4][4], int tempArray[4][4], Board* 
 	blockState = BlockState::DOWN;
 }
 
-void Tetromino::downToLeft(int tempBlockMap[4][4], int tempArray[4][4], Board* _gameBoard)
+void Tetromino::downToLeft(int tempBlockMap[5][5], int tempArray[5][5], Board* _gameBoard)
 {
 	// Check (0,0)
 	if (checkRotationCollision(_x, _y, tempArray, _gameBoard) == false) {
@@ -254,7 +262,7 @@ void Tetromino::downToLeft(int tempBlockMap[4][4], int tempArray[4][4], Board* _
 	blockState = BlockState::LEFT;
 }
 
-void Tetromino::leftToUp(int tempBlockMap[4][4], int tempArray[4][4], Board* _gameBoard)
+void Tetromino::leftToUp(int tempBlockMap[5][5], int tempArray[5][5], Board* _gameBoard)
 {
 	// Check (0,0)
 	if (checkRotationCollision(_x, _y, tempArray, _gameBoard) == false) {
@@ -291,7 +299,7 @@ void Tetromino::leftToUp(int tempBlockMap[4][4], int tempArray[4][4], Board* _ga
 
 bool Tetromino::checkCollision(int xPos, int yPos, Board* _gameBoard)
 {
-	for (int i = 0; i < _blockMapHeight; i++) {
+	for (int i = 0; i < _blockMapHeight; ++i) {
 		for (int j = 0; j < _blockMapWidth; j++) {
 			if (blockMap[j][i] != 0) {
 
@@ -314,9 +322,9 @@ bool Tetromino::checkCollision(int xPos, int yPos, Board* _gameBoard)
 	return false;
 }
 
-bool Tetromino::checkRotationCollision(int xPos, int yPos, int tempArray[4][4], Board* _gameBoard)
+bool Tetromino::checkRotationCollision(int xPos, int yPos, int tempArray[5][5], Board* _gameBoard)
 {
-	for (int i = 0; i < _blockMapHeight; i++) {
+	for (int i = 0; i < _blockMapHeight; ++i) {
 		for (int j = 0; j < _blockMapWidth; j++) {
 			if (tempArray[j][i] != 0) {
 
@@ -348,10 +356,10 @@ Vector2D Tetromino::convertCoords(int x, int y)
 	return boardCoords;
 }
 
-void Tetromino::copyToBlockMap(int tempArray[4][4])
+void Tetromino::copyToBlockMap(int tempArray[5][5])
 {
 	//Copy TempArray to BlockMap
-	for (int i = 0; i < _blockMapHeight; i++) {
+	for (int i = 0; i < _blockMapHeight; ++i) {
 		for (int j = 0; j < _blockMapWidth; j++) {
 			blockMap[j][i] = tempArray[j][i];
 		}

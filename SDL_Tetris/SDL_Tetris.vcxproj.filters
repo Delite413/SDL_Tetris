@@ -48,6 +48,12 @@
     <ClCompile Include="L_Block.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="I_Block.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="O_Block.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEngine.h">
@@ -78,6 +84,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="L_Block.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="I_Block.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="O_Block.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

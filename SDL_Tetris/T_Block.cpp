@@ -28,7 +28,7 @@ T_Block::~T_Block()
 
 void T_Block::render()
 {
-	for (int i = 0; i < _blockMapHeight; i++) {
+	for (int i = 0; i < _blockMapHeight; ++i) {
 		for (int j = 0; j < _blockMapWidth; j++) {
 			if (blockMap[j][i] != 0) {
 
@@ -42,6 +42,8 @@ void T_Block::render()
 				// Render Purple T
 				SDL_SetRenderDrawColor(_renderer, 255, 0, 255, 255);
 				SDL_RenderFillRect(_renderer, &tBlock_Block);
+				SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
+				SDL_RenderDrawRect(_renderer, &tBlock_Block);
 			}
 		}
 	}

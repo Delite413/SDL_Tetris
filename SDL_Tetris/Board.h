@@ -18,6 +18,7 @@ public:
 	SDL_Texture* boardTexture;
 
 	void checkForLines();
+	void checkGameOver();
 	void deleteLine(int line);
 	void render();
 	void update();
