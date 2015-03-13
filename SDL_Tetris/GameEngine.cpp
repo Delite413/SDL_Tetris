@@ -34,14 +34,20 @@ void GameEngine::init()
 	// Initialize SDL
 	SDL_Init(SDL_INIT_EVERYTHING);
 
+	// SDL_TTF
+	TTF_Init();
+
 	// Create SDL Window
 	_window = SDL_CreateWindow("SDL Tetris", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_OPENGL);
 
 	// Create SDL Renderer
 	_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
 
-	//Create GameBoard Instance
+	// Create GameBoard Instance
 	_gameBoard = new Board(_renderer);
+
+	// Create User Interface Instance
+	_userInterface = new UserInterface(_renderer);
 }
 
 void GameEngine::gameLoop()
@@ -159,16 +165,22 @@ void GameEngine::render()
 	// Draw Active Tetromino
 	_bagOfTetrominos.front()->render();
 
+	// Draw UI Elements
+	_userInterface->render();
+
 }
 
 void GameEngine::close()
 {
 	// Destroy All The Things!
+	delete _userInterface;
+	_userInterface = nullptr;
 	delete _gameBoard;
 	_gameBoard = nullptr;
 	SDL_DestroyRenderer(_renderer);
 	_renderer = nullptr;
 	SDL_DestroyWindow(_window);
 	_window = nullptr;
+	TTF_Quit();
 	SDL_Quit();
 }

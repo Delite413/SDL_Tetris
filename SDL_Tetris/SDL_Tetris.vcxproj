@@ -80,6 +80,7 @@
     <ClCompile Include="Tetris.cpp" />
     <ClCompile Include="Tetromino.cpp" />
     <ClCompile Include="T_Block.cpp" />
+    <ClCompile Include="UserInterface.cpp" />
     <ClCompile Include="Vector2D.cpp" />
     <ClCompile Include="Z_Block.cpp" />
   </ItemGroup>
@@ -94,6 +95,7 @@
     <ClInclude Include="S_Block.h" />
     <ClInclude Include="Tetromino.h" />
     <ClInclude Include="T_Block.h" />
+    <ClInclude Include="UserInterface.h" />
     <ClInclude Include="Vector2D.h" />
     <ClInclude Include="Z_Block.h" />
   </ItemGroup>

@@ -7,6 +7,7 @@
 
 #include "Board.h"
 #include "Tetromino.h"
+#include "UserInterface.h"
 
 class GameEngine
 {
@@ -32,6 +33,7 @@ private:
 
 	Board* _gameBoard;
 	Tetromino* _tetromino;
+	UserInterface* _userInterface;
 
 	std::deque<std::shared_ptr<Tetromino>> _bagOfTetrominos;
 

@@ -16,7 +16,7 @@ Board::Board(SDL_Renderer* _renderer) : _renderer(_renderer), _blockSize(20)
 			_board[0][i] = 8;
 			_board[11][i] = 8;
 	}
-	//Create Bottom Border
+	// Create Bottom Border
 	for (int i = 0; i < BOARD_WIDTH; ++i) {
 		_board[i][20] = 8;
 	}

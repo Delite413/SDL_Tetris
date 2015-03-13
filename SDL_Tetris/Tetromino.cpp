@@ -27,6 +27,7 @@ Tetromino::~Tetromino()
 
 void Tetromino::moveBlock()
 {
+	// Move Block Down 20 Pixels
 	this->setY(this->getY() + 20);
 }
 
@@ -156,7 +157,7 @@ void Tetromino::rotateClockwise(Board* _gameBoard)
 void Tetromino::update()
 {
 }
-
+// Note: Clean Up code Later. Pass in Offsets as Arguments as opposed to hard coding.
 void Tetromino::upToRight(int tempBlockMap[5][5], int tempArray[5][5], Board* _gameBoard)
 {
 	// Check (0,0)
