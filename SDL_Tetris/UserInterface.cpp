@@ -15,8 +15,15 @@ UserInterface::UserInterface(SDL_Renderer* _renderer) : _renderer(_renderer), _s
 	_comboColor.b = 0;
 	_comboColor.a = 0;
 
+	// Set Title Colors 
+	_titleColor.r = 60;
+	_titleColor.g = 60;
+	_titleColor.b = 60;
+	_titleColor.a = 255;
+
 	// Fonts / Sizes
 	_scoreFont = TTF_OpenFont("yukarimobil.ttf", 60);
+	_titleFont = TTF_OpenFont("yukarimobil.ttf", 100);
 }
 
 UserInterface::~UserInterface()
@@ -50,9 +57,38 @@ void UserInterface::drawScore(unsigned long &playerScore)
 	targetRect.y = 75;
 
 	SDL_RenderCopy(_renderer, _scoreTexture, &scoreTextRect, &targetRect);
+	SDL_DestroyTexture(_scoreTexture);
+}
+
+void UserInterface::drawTitle()
+{
+	// Draw Title Text
+	SDL_Surface* titleText = TTF_RenderText_Blended(_titleFont, "SDL_TETRIS", _titleColor);
+	_titleTexture = SDL_CreateTextureFromSurface(_renderer, titleText);
+
+	int titleWidth = titleText->w;
+	int titleHeight = titleText->h;
+
+	SDL_FreeSurface(titleText);
+
+	SDL_Rect titleTextRect;
+	titleTextRect.w = titleWidth;
+	titleTextRect.h = titleHeight;
+	titleTextRect.x = 0;
+	titleTextRect.y = 0;
+
+	SDL_Rect targetRect;
+	targetRect.w = titleWidth;
+	targetRect.h = titleHeight;
+	targetRect.x = -135;
+	targetRect.y = 290;
+
+	SDL_RenderCopyEx(_renderer, _titleTexture, &titleTextRect, &targetRect, 270, NULL, SDL_FLIP_NONE);
+	SDL_DestroyTexture(_titleTexture);
 }
 
 void UserInterface::render(unsigned long &playerScore, int &multiplier, unsigned int &linesDeleted)
 {
+	drawTitle();
 	drawScore(playerScore);
 }

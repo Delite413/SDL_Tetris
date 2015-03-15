@@ -162,8 +162,10 @@ void Board::render()
 			else if (_board[i][j] == 8) {
 				// Border
 				SDL_Rect borderRect = { SCREEN_X_OFFSET + i * _blockSize, SCREEN_Y_OFFSET + j * _blockSize, _blockSize, _blockSize };
-				SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
+				SDL_SetRenderDrawColor(_renderer, 150, 150, 150, 255);
 				SDL_RenderFillRect(_renderer, &borderRect);
+				SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
+				SDL_RenderDrawRect(_renderer, &borderRect);
 			}
 		}
 	}
