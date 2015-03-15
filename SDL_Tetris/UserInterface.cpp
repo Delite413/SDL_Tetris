@@ -1,7 +1,14 @@
 #include "UserInterface.h"
+#include "I_Block.h"
+#include "J_Block.h"
+#include "L_Block.h"
+#include "O_Block.h"
+#include "S_Block.h"
+#include "T_Block.h"
+#include "Z_Block.h"
 
 
-UserInterface::UserInterface(SDL_Renderer* _renderer) : _renderer(_renderer), _scoreFont(nullptr)
+UserInterface::UserInterface(SDL_Renderer* _renderer, Board* _gameBoard) : _renderer(_renderer), _gameBoard(_gameBoard), _scoreFont(nullptr)
 {
 	// Set Default Text Color ( White )
 	_defaultColor.r = 255;
@@ -30,6 +37,50 @@ UserInterface::~UserInterface()
 {
 	TTF_CloseFont(_scoreFont);
 	_scoreFont = nullptr;
+}
+
+void UserInterface::drawBlockFrame(const type_info &type)
+{
+	SDL_Rect insideBox;
+	insideBox.w = 100;
+	insideBox.h = 100;
+	insideBox.x = 400;
+	insideBox.y = 150;
+
+	SDL_SetRenderDrawColor(_renderer, 150, 150, 150, 255);
+	SDL_RenderDrawRect(_renderer, &insideBox);
+
+	std::cout << type.name() << std::endl;
+
+	if (type == typeid(I_Block)) {
+		I_Block iBlock(_renderer, _gameBoard, 400,155);
+		iBlock.render();
+	}
+	else if (type == typeid(J_Block)) {
+		J_Block jBlock(_renderer, _gameBoard, 400, 155);
+		jBlock.render();
+	}
+	else if (type == typeid(L_Block)) {
+		L_Block lBlock(_renderer, _gameBoard, 400, 155);
+		lBlock.render();
+	}
+	else if (type == typeid(O_Block)) {
+		O_Block oBlock(_renderer, _gameBoard, 400, 155);
+		oBlock.render();
+	}
+	else if (type == typeid(S_Block)) {
+		S_Block sBlock(_renderer, _gameBoard, 400, 155);
+		sBlock.render();
+	}
+	else if (type == typeid(T_Block)) {
+		T_Block tBlock(_renderer, _gameBoard, 400, 155);
+		tBlock.render();
+	}
+	else if (type == typeid(Z_Block)) {
+		Z_Block zBlock(_renderer, _gameBoard, 400, 155);
+		zBlock.render();
+	}
+	
 }
 
 void UserInterface::drawScore(unsigned long &playerScore)
@@ -87,8 +138,9 @@ void UserInterface::drawTitle()
 	SDL_DestroyTexture(_titleTexture);
 }
 
-void UserInterface::render(unsigned long &playerScore, int &multiplier, unsigned int &linesDeleted)
+void UserInterface::render(unsigned long &playerScore, int &multiplier, unsigned int &linesDeleted, const type_info &type)
 {
 	drawTitle();
 	drawScore(playerScore);
+	drawBlockFrame(type);
 }

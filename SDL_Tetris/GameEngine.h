@@ -32,6 +32,7 @@ private:
 	unsigned int _linesDeleted;
 	int _totalLines;
 	int _multiplier;
+	unsigned int _level;
 	unsigned long _runningTime;
 	unsigned long _timeStart;
 	unsigned long _timeEnd;

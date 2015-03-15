@@ -52,7 +52,7 @@ void GameEngine::init()
 	_gameBoard = new Board(_renderer);
 
 	// Create User Interface Instance
-	_userInterface = new UserInterface(_renderer);
+	_userInterface = new UserInterface(_renderer, _gameBoard);
 }
 
 void GameEngine::gameLoop()
@@ -71,7 +71,7 @@ void GameEngine::gameLoop()
 
 void GameEngine::generateTetrominos()
 {
-	if (_bagOfTetrominos.size() <= 1) {
+	if (_bagOfTetrominos.size() <= 2) {
 		//Create a Random Number between 1 and 7 ( 1 for Each Shape )
 		std::random_device rd;
 		std::default_random_engine generator(rd());
@@ -162,14 +162,10 @@ void GameEngine::update()
 		if (_bagOfTetrominos.front()->checkCollision(_bagOfTetrominos.front()->getX(), _bagOfTetrominos.front()->getY() + BLOCK_SIZE, _gameBoard)) {
 			_bagOfTetrominos.front()->placeBricks(_gameBoard, typeid((*_bagOfTetrominos.front())));
 			_bagOfTetrominos.pop_front();
-
-			if (_gameBoard->checkForLines(_linesDeleted, _playerScore)) {
-				_multiplier++;
-			}
-			else {
-				_multiplier = 0;
-			}
-
+			if (_gameBoard->checkForLines(_linesDeleted, _playerScore) == true) {
+				_totalLines += _linesDeleted;
+				_level = _totalLines / 20;
+			}		
 		}
 		else {
 			_bagOfTetrominos.front()->moveBlock();
@@ -187,7 +183,7 @@ void GameEngine::render()
 	_bagOfTetrominos.front()->render();
 
 	// Draw UI Elements
-	_userInterface->render(_playerScore, _multiplier, _linesDeleted);
+	_userInterface->render(_playerScore, _multiplier, _linesDeleted, typeid((*_bagOfTetrominos.at(1))));
 
 }
 
