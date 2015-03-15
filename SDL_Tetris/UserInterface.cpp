@@ -29,14 +29,23 @@ UserInterface::UserInterface(SDL_Renderer* _renderer, Board* _gameBoard) : _rend
 	_titleColor.a = 255;
 
 	// Fonts / Sizes
+	_blockTitleFont = TTF_OpenFont("yukarimobil.ttf", 30);
+	_defaultFont = TTF_OpenFont("yukarimobil.ttf", 20);
+	_levelNumberFont = TTF_OpenFont("yukarimobil.ttf", 100);
 	_scoreFont = TTF_OpenFont("yukarimobil.ttf", 60);
 	_titleFont = TTF_OpenFont("yukarimobil.ttf", 100);
 }
 
 UserInterface::~UserInterface()
 {
+	TTF_CloseFont(_blockTitleFont);
+	TTF_CloseFont(_levelNumberFont);
 	TTF_CloseFont(_scoreFont);
+	TTF_CloseFont(_titleFont);
+	_blockTitleFont = nullptr;
+	_levelNumberFont = nullptr;
 	_scoreFont = nullptr;
+	_titleFont = nullptr;
 }
 
 void UserInterface::drawBlockFrame(const type_info &type)
@@ -50,10 +59,8 @@ void UserInterface::drawBlockFrame(const type_info &type)
 	SDL_SetRenderDrawColor(_renderer, 150, 150, 150, 255);
 	SDL_RenderDrawRect(_renderer, &insideBox);
 
-	std::cout << type.name() << std::endl;
-
 	if (type == typeid(I_Block)) {
-		I_Block iBlock(_renderer, _gameBoard, 400,155);
+		I_Block iBlock(_renderer, _gameBoard, 390,155);
 		iBlock.render();
 	}
 	else if (type == typeid(J_Block)) {
@@ -65,7 +72,7 @@ void UserInterface::drawBlockFrame(const type_info &type)
 		lBlock.render();
 	}
 	else if (type == typeid(O_Block)) {
-		O_Block oBlock(_renderer, _gameBoard, 400, 155);
+		O_Block oBlock(_renderer, _gameBoard, 390, 160);
 		oBlock.render();
 	}
 	else if (type == typeid(S_Block)) {
@@ -81,6 +88,106 @@ void UserInterface::drawBlockFrame(const type_info &type)
 		zBlock.render();
 	}
 	
+}
+
+void UserInterface::drawLevelFrame(const unsigned int &level)
+{
+	// Create Level Text
+	std::string levelString = std::to_string(level);
+	SDL_Surface* levelText = TTF_RenderText_Blended(_levelNumberFont, levelString.c_str(), _defaultColor);
+	_levelTexture = SDL_CreateTextureFromSurface(_renderer, levelText);
+
+	SDL_Surface* levelTitleText = TTF_RenderText_Blended(_blockTitleFont, "Level", _defaultColor);
+	_levelTitleTexture = SDL_CreateTextureFromSurface(_renderer, levelTitleText);
+
+	int levelWidth = levelText->w;
+	int levelHeight = levelText->h;
+
+	int levelTitleWidth = levelTitleText->w;
+	int levelTitleHeight = levelTitleText->h;
+
+	SDL_FreeSurface(levelText);
+	SDL_FreeSurface(levelTitleText);
+
+	SDL_Rect levelTextRect;
+	levelTextRect.w = levelWidth;
+	levelTextRect.h = levelHeight;
+	levelTextRect.x = 0;
+	levelTextRect.y = 0;
+
+	SDL_Rect targetRect;
+	targetRect.w = levelWidth;
+	targetRect.h = levelHeight;
+	targetRect.x = 450;
+	targetRect.y = 475;
+
+	SDL_Rect levelTitleTextRect;
+	levelTitleTextRect.w = levelTitleWidth;
+	levelTitleTextRect.h = levelTitleHeight;
+	levelTitleTextRect.x = 0;
+	levelTitleTextRect.y = 0;
+
+	SDL_Rect targetRect2;
+	targetRect2.w = levelTitleWidth;
+	targetRect2.h = levelTitleHeight;
+	targetRect2.x = 420;
+	targetRect2.y = 455;
+
+	SDL_RenderCopy(_renderer, _levelTexture, &levelTextRect, &targetRect);
+	SDL_RenderCopy(_renderer, _levelTitleTexture, &levelTitleTextRect, &targetRect2);
+
+	SDL_DestroyTexture(_levelTexture);
+	SDL_DestroyTexture(_levelTitleTexture);
+}
+
+void UserInterface::drawLinesFrame(const unsigned int &linesDeleted)
+{
+	// Create Lines Text
+	std::string linesDeletedString = std::to_string(linesDeleted);
+	SDL_Surface* linesText = TTF_RenderText_Blended(_defaultFont, linesDeletedString.c_str(), _defaultColor);
+	_linesTexture = SDL_CreateTextureFromSurface(_renderer, linesText);
+
+	SDL_Surface* linesTitleText = TTF_RenderText_Blended(_defaultFont, "Lines Deleted", _defaultColor);
+	_linesTitleTexture = SDL_CreateTextureFromSurface(_renderer, linesTitleText);
+
+	int linesWidth = linesText->w;
+	int linesHeight= linesText->h;
+
+	int linesTitleWidth = linesTitleText->w;
+	int linesTitleHeight = linesTitleText->h;
+
+	SDL_FreeSurface(linesText);
+	SDL_FreeSurface(linesTitleText);
+
+	SDL_Rect linesTextRect;
+	linesTextRect.w = linesWidth;
+	linesTextRect.h = linesHeight;
+	linesTextRect.x = 0;
+	linesTextRect.y = 0;
+
+	SDL_Rect targetRect;
+	targetRect.w = linesWidth;
+	targetRect.h = linesHeight;
+	targetRect.x = 500;
+	targetRect.y = 270;
+
+	SDL_Rect linesTitleTextRect;
+	linesTitleTextRect.w = linesTitleWidth;
+	linesTitleTextRect.h = linesTitleHeight;
+	linesTitleTextRect.x = 0;
+	linesTitleTextRect.y = 0;
+
+	SDL_Rect targetRect2;
+	targetRect2.w = linesTitleWidth;
+	targetRect2.h = linesTitleHeight;
+	targetRect2.x = 400;
+	targetRect2.y = 250;
+
+	SDL_RenderCopy(_renderer, _linesTexture, &linesTextRect, &targetRect);
+	SDL_RenderCopy(_renderer, _linesTitleTexture, &linesTitleTextRect, &targetRect2);
+
+	SDL_DestroyTexture(_linesTexture);
+	SDL_DestroyTexture(_levelTitleTexture);
 }
 
 void UserInterface::drawScore(unsigned long &playerScore)
@@ -138,9 +245,11 @@ void UserInterface::drawTitle()
 	SDL_DestroyTexture(_titleTexture);
 }
 
-void UserInterface::render(unsigned long &playerScore, int &multiplier, unsigned int &linesDeleted, const type_info &type)
+void UserInterface::render(unsigned long &playerScore, int &multiplier, unsigned int &level, unsigned int &linesDeleted, const type_info &type)
 {
 	drawTitle();
 	drawScore(playerScore);
 	drawBlockFrame(type);
+	drawLevelFrame(level);
+	drawLinesFrame(linesDeleted);
 }

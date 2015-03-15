@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL/SDL.h>
+#include <SDL/SDL_mixer.h>
 #include <deque>
 #include <memory>
 #include <random>
@@ -23,6 +24,7 @@ public:
 	void init();
 	void gameLoop();
 	void handleInput();
+	void loadMedia();
 	void update();
 	void render();
 	void close();
@@ -30,7 +32,6 @@ public:
 private:
 	unsigned long _playerScore;
 	unsigned int _linesDeleted;
-	int _totalLines;
 	int _multiplier;
 	unsigned int _level;
 	unsigned long _runningTime;
@@ -42,6 +43,7 @@ private:
 	SDL_Renderer* _renderer;
 
 	Board* _gameBoard;
+	Mix_Music* _tetrisTheme;
 	Tetromino* _tetromino;
 	UserInterface* _userInterface;
 

@@ -10,12 +10,14 @@
 #include <iostream>
 
 
-GameEngine::GameEngine() : inGame(true), _window(nullptr), _renderer(nullptr), _playerScore(0), _linesDeleted(0), _totalLines(0), _multiplier(0), _waitTime(10), _timeEnd(0)
+GameEngine::GameEngine() : inGame(true), _window(nullptr), _renderer(nullptr),_tetrisTheme(nullptr), _playerScore(0), _linesDeleted(0), _multiplier(0), _waitTime(10), _timeEnd(0)
 {
 }
 
 GameEngine::~GameEngine()
 {
+	Mix_FreeMusic(_tetrisTheme);
+	_tetrisTheme = nullptr;
 }
 
 void GameEngine::run()
@@ -42,6 +44,11 @@ void GameEngine::init()
 	// SDL_TTF
 	TTF_Init();
 
+	// SDL_Mixer
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+		std::cout << "Could not Start SDL_Mixer" << std::endl;
+	}
+
 	// Create SDL Window
 	_window = SDL_CreateWindow("SDL Tetris", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_OPENGL);
 
@@ -53,6 +60,8 @@ void GameEngine::init()
 
 	// Create User Interface Instance
 	_userInterface = new UserInterface(_renderer, _gameBoard);
+
+	loadMedia();
 }
 
 void GameEngine::gameLoop()
@@ -153,6 +162,12 @@ void GameEngine::handleInput()
 	}
 }
 
+void GameEngine::loadMedia()
+{
+	_tetrisTheme = Mix_LoadMUS("TETRISB.mid");
+	Mix_PlayMusic(_tetrisTheme, -1);
+}
+
 void GameEngine::update()
 {
 	_gameBoard->update();
@@ -163,8 +178,7 @@ void GameEngine::update()
 			_bagOfTetrominos.front()->placeBricks(_gameBoard, typeid((*_bagOfTetrominos.front())));
 			_bagOfTetrominos.pop_front();
 			if (_gameBoard->checkForLines(_linesDeleted, _playerScore) == true) {
-				_totalLines += _linesDeleted;
-				_level = _totalLines / 20;
+				_level = _linesDeleted / 20;
 			}		
 		}
 		else {
@@ -183,7 +197,7 @@ void GameEngine::render()
 	_bagOfTetrominos.front()->render();
 
 	// Draw UI Elements
-	_userInterface->render(_playerScore, _multiplier, _linesDeleted, typeid((*_bagOfTetrominos.at(1))));
+	_userInterface->render(_playerScore, _multiplier, _level, _linesDeleted, typeid((*_bagOfTetrominos.at(1))));
 
 }
 
