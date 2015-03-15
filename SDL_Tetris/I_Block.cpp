@@ -1,11 +1,9 @@
 #include "I_Block.h"
 
 
-I_Block::I_Block(SDL_Renderer* _renderer, Board* _gameBoard) : _renderer(_renderer), _gameBoard(_gameBoard)
+I_Block::I_Block(SDL_Renderer* _renderer, Board* _gameBoard, int _startingXPos, int _startingYPos) : _renderer(_renderer), _gameBoard(_gameBoard)
 {
 	// Set Initial Starting Positions
-	_startingXPos = 230;
-	_startingYPos = 110;
 	_x = _startingXPos;
 	_y = _startingYPos;
 	_blockMapWidth = 5;

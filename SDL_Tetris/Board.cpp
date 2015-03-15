@@ -34,8 +34,9 @@ void Board::update()
 	render();
 }
 
-void Board::checkForLines()
+bool Board::checkForLines(unsigned int &_linesDeleted, unsigned long &playerScore)
 {
+	int deletedLines = 0;
 
 	for (int i = 0; i < 20; ++i) {
 		int filledBlocks = 0;
@@ -47,8 +48,29 @@ void Board::checkForLines()
 
 			if (filledBlocks == 10) {
 				deleteLine(i);
+				++deletedLines;
 			}
 		}
+	}
+	if (deletedLines != 0) {
+		if (deletedLines == 4) {
+			playerScore += 100;
+		}
+		else if (deletedLines == 3) {
+			playerScore += 50;
+		}
+		else if (deletedLines == 2) {
+			playerScore += 25;
+		}
+		else {
+			playerScore += 10;
+		}
+
+		_linesDeleted += deletedLines;
+		return true;
+	}
+	else {
+		return false;
 	}
 }
 

@@ -8,7 +8,7 @@ class S_Block :
 	public Tetromino
 {
 public:
-	S_Block(SDL_Renderer* _renderer, Board* _gameBoard);
+	S_Block(SDL_Renderer* _renderer, Board* _gameBoard, int _startingXPos, int _startingYPos);
 	~S_Block();
 
 	void render();

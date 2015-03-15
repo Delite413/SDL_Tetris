@@ -9,7 +9,7 @@ class T_Block :
 	public Tetromino
 {
 public:
-	T_Block(SDL_Renderer* _renderer, Board* _gameBoard);
+	T_Block(SDL_Renderer* _renderer, Board* _gameBoard, int _startingXPos, int _startingYPos);
 	~T_Block();
 
 	void     render();

@@ -10,7 +10,7 @@
 #include <iostream>
 
 
-GameEngine::GameEngine() : inGame(true), _window(nullptr), _renderer(nullptr)
+GameEngine::GameEngine() : inGame(true), _window(nullptr), _renderer(nullptr), _playerScore(0), _linesDeleted(0), _totalLines(0), _multiplier(0), _waitTime(10), _timeEnd(0)
 {
 }
 
@@ -23,7 +23,12 @@ void GameEngine::run()
 	init();
 
 	while (inGame) {
+		_timeStart = SDL_GetTicks();
 		gameLoop();
+		_timeEnd = SDL_GetTicks();
+		_runningTime += (_timeEnd - _timeStart);
+		
+
 	}
 
 	close();
@@ -41,7 +46,7 @@ void GameEngine::init()
 	_window = SDL_CreateWindow("SDL Tetris", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_OPENGL);
 
 	// Create SDL Renderer
-	_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
+	_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_PRESENTVSYNC);
 
 	// Create GameBoard Instance
 	_gameBoard = new Board(_renderer);
@@ -62,7 +67,6 @@ void GameEngine::gameLoop()
 	render();
 
 	SDL_RenderPresent(_renderer);
-	SDL_Delay(200);
 }
 
 void GameEngine::generateTetrominos()
@@ -81,25 +85,25 @@ void GameEngine::generateTetrominos()
 			//std::cout << "Generated Number: " << generatedNumber << std::endl;
 			switch (generatedNumber) {
 			case 1:
-				_bagOfTetrominos.emplace_back(std::make_unique<T_Block>(_renderer, _gameBoard));
+				_bagOfTetrominos.emplace_back(std::make_unique<T_Block>(_renderer, _gameBoard, 230, 130));
 				break;
 			case 2:
-				_bagOfTetrominos.emplace_back(std::make_unique<J_Block>(_renderer, _gameBoard));
+				_bagOfTetrominos.emplace_back(std::make_unique<J_Block>(_renderer, _gameBoard, 230, 130));
 				break;
 			case 3:
-				_bagOfTetrominos.emplace_back(std::make_unique<S_Block>(_renderer, _gameBoard));
+				_bagOfTetrominos.emplace_back(std::make_unique<S_Block>(_renderer, _gameBoard, 230, 130));
 				break;
 			case 4:
-				_bagOfTetrominos.emplace_back(std::make_unique<Z_Block>(_renderer, _gameBoard));
+				_bagOfTetrominos.emplace_back(std::make_unique<Z_Block>(_renderer, _gameBoard, 230, 130));
 				break;
 			case 5:
-				_bagOfTetrominos.emplace_back(std::make_unique<L_Block>(_renderer, _gameBoard));
+				_bagOfTetrominos.emplace_back(std::make_unique<L_Block>(_renderer, _gameBoard, 230, 130));
 				break;
 			case 6:
-				_bagOfTetrominos.emplace_back(std::make_unique<I_Block>(_renderer, _gameBoard));
+				_bagOfTetrominos.emplace_back(std::make_unique<I_Block>(_renderer, _gameBoard, 230, 130));
 				break;
 			case 7:
-				_bagOfTetrominos.emplace_back(std::make_unique<O_Block>(_renderer, _gameBoard));
+				_bagOfTetrominos.emplace_back(std::make_unique<O_Block>(_renderer, _gameBoard, 230, 130));
 				break;
 			default:
 				break;
@@ -137,6 +141,11 @@ void GameEngine::handleInput()
 			if (evnt.key.keysym.sym == SDLK_UP) {
 				_bagOfTetrominos.front()->rotateClockwise(_gameBoard);
 			}
+			if (evnt.key.keysym.sym == SDLK_DOWN) {
+				while (_bagOfTetrominos.front()->checkCollision(_bagOfTetrominos.front()->getX(), _bagOfTetrominos.front()->getY() + BLOCK_SIZE, _gameBoard) == false) {
+					_bagOfTetrominos.front()->moveBlock();
+				}
+			}
 			break;
 		default:
 			break;
@@ -147,14 +156,26 @@ void GameEngine::handleInput()
 void GameEngine::update()
 {
 	_gameBoard->update();
-	if (_bagOfTetrominos.front()->checkCollision(_bagOfTetrominos.front()->getX(), _bagOfTetrominos.front()->getY() + BLOCK_SIZE, _gameBoard)) {
-		_bagOfTetrominos.front()->placeBricks(_gameBoard, typeid((*_bagOfTetrominos.front())));
-		_bagOfTetrominos.pop_front();
+
+	if (_runningTime >= 700) {
+
+		if (_bagOfTetrominos.front()->checkCollision(_bagOfTetrominos.front()->getX(), _bagOfTetrominos.front()->getY() + BLOCK_SIZE, _gameBoard)) {
+			_bagOfTetrominos.front()->placeBricks(_gameBoard, typeid((*_bagOfTetrominos.front())));
+			_bagOfTetrominos.pop_front();
+
+			if (_gameBoard->checkForLines(_linesDeleted, _playerScore)) {
+				_multiplier++;
+			}
+			else {
+				_multiplier = 0;
+			}
+
+		}
+		else {
+			_bagOfTetrominos.front()->moveBlock();
+			_runningTime = 0;
+		}
 	}
-	else {
-		_bagOfTetrominos.front()->moveBlock();
-	}
-	_gameBoard->checkForLines();
 }
 
 void GameEngine::render()
@@ -166,7 +187,7 @@ void GameEngine::render()
 	_bagOfTetrominos.front()->render();
 
 	// Draw UI Elements
-	_userInterface->render();
+	_userInterface->render(_playerScore, _multiplier, _linesDeleted);
 
 }
 

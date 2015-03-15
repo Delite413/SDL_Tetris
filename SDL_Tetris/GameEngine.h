@@ -28,6 +28,15 @@ public:
 	void close();
 
 private:
+	unsigned long _playerScore;
+	unsigned int _linesDeleted;
+	int _totalLines;
+	int _multiplier;
+	unsigned long _runningTime;
+	unsigned long _timeStart;
+	unsigned long _timeEnd;
+	unsigned long _waitTime;
+
 	SDL_Window* _window;
 	SDL_Renderer* _renderer;
 

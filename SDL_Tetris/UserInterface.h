@@ -10,33 +10,17 @@ public:
 	UserInterface(SDL_Renderer* _renderer);
 	~UserInterface();
 
-	SDL_Texture* nextBlockTexture;
-	SDL_Texture* playerScoreTexture;
-
-	void drawNextBlock();
-	void drawScore(unsigned long playerScore, int multiplier);
-	void render();
+	void drawScore(unsigned long &playerScore);
+	void render(unsigned long &playerScore, int &multiplier, unsigned int &linesDeleted);
 
 private:
-	// Next Block Variables
-	int _nextBlockWidth;
-	int _nextBlockHeight;
-	int _nextBlockXPos;
-	int _nextBlockYPos;
-	//Player Score Variables
-	int _playerScoreWidth;
-	int _playerScoreHeight;
+	SDL_Color _comboColor;
+	SDL_Color _defaultColor;
 
-	std::string nextText;
-
-	SDL_Color defaultTextColor;
-	SDL_Color comboColor;
 	SDL_Renderer* _renderer;
-	SDL_Surface* nextTextSurface;
-	SDL_Texture* _nextBlockTextTexture;
-	TTF_Font* nextBlockText;
 
-	void makeText(std::string text, std::string fontName, int fontSize, SDL_Color color, int xPos, int yPos);
-
+	// Score Related
+	SDL_Texture* _scoreTexture;
+	TTF_Font* _scoreFont;
 };
 
