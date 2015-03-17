@@ -18,11 +18,14 @@ Tetromino::Tetromino() : blockState(BlockState::UP)
 			blockMap[j][i] = 0;
 		}
 	}
+
+	_blockContact = Mix_LoadWAV("block.wav");
 }
 
 Tetromino::~Tetromino()
 {
-
+	Mix_FreeChunk(_blockContact);
+	_blockContact = nullptr;
 }
 
 void Tetromino::moveBlock()
@@ -314,7 +317,7 @@ bool Tetromino::checkCollision(int xPos, int yPos, Board* _gameBoard)
 				Vector2D convertedCoords = convertCoords(checkPosition.x, checkPosition.y);
 
 				if (_gameBoard->_board[convertedCoords.getX()][convertedCoords.getY()] != 0) {
-					std::cout << "Collision Detected!" << std::endl;
+					Mix_PlayChannel(-1, _blockContact, 0);
 					return true;
 				}
 			}

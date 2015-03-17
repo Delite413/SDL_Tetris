@@ -10,7 +10,7 @@
 #include <iostream>
 
 
-GameEngine::GameEngine() : inGame(true), _window(nullptr), _renderer(nullptr),_tetrisTheme(nullptr), _playerScore(0), _linesDeleted(0), _multiplier(0), _waitTime(10), _timeEnd(0)
+GameEngine::GameEngine() : inGame(true), _window(nullptr), _renderer(nullptr), _tetrisTheme(nullptr), _playerScore(0), _linesDeleted(0), _multiplier(0), _waitTime(700), _timeEnd(0)
 {
 }
 
@@ -121,6 +121,12 @@ void GameEngine::generateTetrominos()
 	}
 }
 
+void GameEngine::updateDifficulty()
+{
+	_waitTime = 700 - (_level * 50);
+	std::cout << "Current Delay: " << _waitTime << std::endl;
+}
+
 void GameEngine::handleInput()
 {
 	SDL_Event evnt;
@@ -171,8 +177,8 @@ void GameEngine::loadMedia()
 void GameEngine::update()
 {
 	_gameBoard->update();
-
-	if (_runningTime >= 700) {
+	updateDifficulty();
+	if (_runningTime >= _waitTime) {
 
 		if (_bagOfTetrominos.front()->checkCollision(_bagOfTetrominos.front()->getX(), _bagOfTetrominos.front()->getY() + BLOCK_SIZE, _gameBoard)) {
 			_bagOfTetrominos.front()->placeBricks(_gameBoard, typeid((*_bagOfTetrominos.front())));

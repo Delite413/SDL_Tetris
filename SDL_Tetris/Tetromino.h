@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL/SDL.h>
+#include <SDL/SDL_mixer.h>
 
 #include "Board.h"
 #include "Vector2D.h"
@@ -51,9 +52,10 @@ protected:
 	int _y;
 	int _startingXPos;
 	int _startingYPos;
-
 	BlockState blockState;
 
+
 private:
+	Mix_Chunk* _blockContact;
 };
 

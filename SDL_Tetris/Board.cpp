@@ -47,6 +47,7 @@ bool Board::checkForLines(unsigned int &_linesDeleted, unsigned long &playerScor
 			}
 
 			if (filledBlocks == 10) {
+				highlightBlocks(i);
 				deleteLine(i);
 				++deletedLines;
 			}
@@ -79,6 +80,11 @@ void Board::checkGameOver()
 	for (int i = 1; i < BOARD_WIDTH - 1; ++i) {
 
 	}
+}
+
+void Board::highlightBlocks(int row)
+{
+	// Code to HighLight Blocks
 }
 
 void Board::deleteLine(int line)

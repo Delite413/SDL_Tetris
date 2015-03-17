@@ -19,6 +19,7 @@ public:
 
 	bool checkForLines(unsigned int &_linesDeleted, unsigned long &playerScore);
 	void checkGameOver();
+	void highlightBlocks(int row);
 	void deleteLine(int line);
 	void render();
 	void update();

@@ -50,5 +50,6 @@ private:
 	std::deque<std::shared_ptr<Tetromino>> _bagOfTetrominos;
 
 	void generateTetrominos();
+	void updateDifficulty();
 };
 
